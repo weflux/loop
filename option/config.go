@@ -26,9 +26,9 @@ type RouteOption struct {
 }
 
 type ProxyOption struct {
-	Connect   *RouteOption            `json:"connect"`
-	Subscribe *RouteOption            `json:"subscribe"`
-	RPC       map[string]*RouteOption `json:"rpc"`
+	Authenticate *RouteOption            `json:"authenticate"`
+	Subscribe    *RouteOption            `json:"subscribe"`
+	RPC          map[string]*RouteOption `json:"rpc"`
 }
 
 type MQTTOption struct {

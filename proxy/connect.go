@@ -8,11 +8,11 @@ import (
 	"net/url"
 )
 
-type ConnectProxy interface {
-	ProxyConnect(ctx context.Context, req *proxypb.ConnectRequest) (*proxypb.ConnectReply, error)
+type AuthenticateProxy interface {
+	ProxyAuthenticate(ctx context.Context, req *proxypb.ConnectRequest) (*proxypb.ConnectReply, error)
 }
 
-func NewConnectProxy(c *option.RouteOption) ConnectProxy {
+func NewAuthenticateProxy(c *option.RouteOption) AuthenticateProxy {
 
 	endpoint := c.Endpoint
 	uri, err := url.Parse(endpoint)
@@ -34,7 +34,7 @@ type httpConnectProxy struct {
 	HttpBase
 }
 
-func (h *httpConnectProxy) ProxyConnect(ctx context.Context, req *proxypb.ConnectRequest) (*proxypb.ConnectReply, error) {
+func (h *httpConnectProxy) ProxyAuthenticate(ctx context.Context, req *proxypb.ConnectRequest) (*proxypb.ConnectReply, error) {
 	rep := &proxypb.ConnectReply{}
 	if err := h.ProxyHTTP(req, rep); err != nil {
 		return nil, err
@@ -47,7 +47,7 @@ type grpcConnectProxy struct {
 	GRPCBase
 }
 
-func (p *grpcConnectProxy) ProxyConnect(ctx context.Context, req *proxypb.ConnectRequest) (*proxypb.ConnectReply, error) {
+func (p *grpcConnectProxy) ProxyAuthenticate(ctx context.Context, req *proxypb.ConnectRequest) (*proxypb.ConnectReply, error) {
 	client := p.GetClient()
 	return client.Connect(ctx, req)
 }

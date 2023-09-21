@@ -4,15 +4,17 @@ import (
 	"bytes"
 	"context"
 	"errors"
+	"fmt"
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/samber/lo"
 	"github.com/weflux/loop/errcodes"
-	message "github.com/weflux/loop/protocol/message/v1"
+	"github.com/weflux/loop/protocol/message/v1"
 	proxypb "github.com/weflux/loop/protocol/proxy"
 	shared "github.com/weflux/loop/protocol/shared"
 	"github.com/weflux/loop/proxy"
 	"github.com/weflux/loop/utils/clientutil"
+	"github.com/weflux/loop/utils/packetutil"
 	"github.com/weflux/loop/utils/topicutil"
 	"log/slog"
 )
@@ -46,6 +48,7 @@ func (h *Proxy) Provides(b byte) bool {
 		mqtt.OnUnsubscribe,
 		mqtt.OnUnsubscribed,
 		mqtt.OnPublish,
+		mqtt.OnConnectAuthenticate,
 	}, []byte{b})
 }
 
@@ -240,4 +243,24 @@ func replyPacket(cl *mqtt.Client, rep *proxypb.RPCReply, req *proxypb.RPCRequest
 func (h *Proxy) OnPublished(cl *mqtt.Client, pk packets.Packet) {
 	h.Log.Debug("on published to channel", "client_id", cl.ID, "topic_name", pk.TopicName)
 	h.HookBase.OnPublished(cl, pk)
+}
+
+func (h *Proxy) OnConnectAuthenticate(cl *mqtt.Client, pk packets.Packet) bool {
+	h.Log.Debug(fmt.Sprintf("[id=%s] try connect authenticate: %s %s", cl.ID, string(pk.Connect.Username), string(pk.Connect.Password)))
+	if h.proxyMap.AuthenticateProxy != nil {
+		req := packetutil.ToConnectRequest(cl, &pk)
+		rep, err := h.proxyMap.AuthenticateProxy.ProxyAuthenticate(emptyCtx(), req)
+		if err != nil {
+			h.Log.Error("authenticate failed", "error", err)
+			return false
+		}
+		if rep.Error == nil {
+			return true
+		}
+
+		h.Log.Error("msg", "authenticate failed", "errno", rep.Error.Code, "errmsg", rep.Error.Message)
+		return false
+	} else {
+		return h.HookBase.OnConnectAuthenticate(cl, pk)
+	}
 }

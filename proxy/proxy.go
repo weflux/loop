@@ -6,16 +6,16 @@ import (
 
 //goland:noinspection GoNameStartsWithPackageName
 type ProxyMap struct {
-	ConnectProxy   ConnectProxy
-	SubscribeProxy SubscribeProxy
-	RPCProxies     map[string]RPCProxy
+	AuthenticateProxy AuthenticateProxy
+	SubscribeProxy    SubscribeProxy
+	RPCProxies        map[string]RPCProxy
 }
 
 func NewProxyMap(opts *option.ProxyOption) *ProxyMap {
-	var connectProxy ConnectProxy
+	var connectProxy AuthenticateProxy
 
-	if opts.Connect != nil {
-		connectProxy = NewConnectProxy(opts.Connect)
+	if opts.Authenticate != nil {
+		connectProxy = NewAuthenticateProxy(opts.Authenticate)
 	}
 
 	var rpcProxies map[string]RPCProxy
@@ -26,7 +26,7 @@ func NewProxyMap(opts *option.ProxyOption) *ProxyMap {
 	// TODO
 
 	return &ProxyMap{
-		ConnectProxy: connectProxy,
-		RPCProxies:   rpcProxies,
+		AuthenticateProxy: connectProxy,
+		RPCProxies:        rpcProxies,
 	}
 }

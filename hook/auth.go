@@ -34,9 +34,9 @@ func (h *Auth) Provides(b byte) bool {
 
 func (h *Auth) OnConnectAuthenticate(cl *mqtt.Client, pk packets.Packet) bool {
 	h.Log.Debug(fmt.Sprintf("[id=%s] try connect authenticate: %s %s", cl.ID, string(pk.Connect.Username), string(pk.Connect.Password)))
-	if h.proxyMap.ConnectProxy != nil {
+	if h.proxyMap.AuthenticateProxy != nil {
 		req := packetutil.ToConnectRequest(cl, &pk)
-		rep, err := h.proxyMap.ConnectProxy.ProxyConnect(emptyCtx(), req)
+		rep, err := h.proxyMap.AuthenticateProxy.ProxyAuthenticate(emptyCtx(), req)
 		if err != nil {
 			h.Log.Error("authenticate failed", "error", err)
 			return false
