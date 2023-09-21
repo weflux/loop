@@ -17,21 +17,21 @@ import (
 )
 
 type ServerSideClient struct {
-	hub          *Hub
+	node         *Node
 	replyAwaiter map[string]chan *message.Reply
 	mu           sync.Mutex
 	broker       broker.Broker
 	logger       *slog.Logger
 }
 
-func newServerSideClient(hub *Hub, broker broker.Broker, logger *slog.Logger) *ServerSideClient {
+func newServerSideClient(node *Node, broker broker.Broker, logger *slog.Logger) *ServerSideClient {
 
 	ssc := &ServerSideClient{
 		replyAwaiter: map[string]chan *message.Reply{},
 		mu:           sync.Mutex{},
 		logger:       logger,
 		broker:       broker,
-		hub:          hub,
+		node:         node,
 	}
 	if err := ssc.Start(context.Background()); err != nil {
 		panic(err)
@@ -40,15 +40,15 @@ func newServerSideClient(hub *Hub, broker broker.Broker, logger *slog.Logger) *S
 	return ssc
 }
 
-func (c *ServerSideClient) Init(hub *Hub) {
-	c.hub = hub
+func (c *ServerSideClient) Init(node *Node) {
+	c.node = node
 }
 
 func (c *ServerSideClient) Start(ctx context.Context) error {
-	if c.hub == nil {
+	if c.node == nil {
 		return errors.New("api client not initialized")
 	}
-	if err := c.hub.Subscribe(topicutil.ReplyTopic(), 1, func(cl *mqtt.Client, sub packets.Subscription, pk packets.Packet) {
+	if err := c.node.Subscribe(topicutil.ReplyTopic(), 1, func(cl *mqtt.Client, sub packets.Subscription, pk packets.Packet) {
 		c.logger.Debug("msg", "received reply message", "topic", pk.TopicName)
 		msg := &message.Message{}
 		if err := contenttype.JSON.Unmarshal(pk.Payload, msg); err != nil {
@@ -79,7 +79,7 @@ func (c *ServerSideClient) Start(ctx context.Context) error {
 }
 
 func (c *ServerSideClient) Stop(ctx context.Context) error {
-	return c.hub.Unsubscribe(topicutil.ReplyTopic(), 1)
+	return c.node.Unsubscribe(topicutil.ReplyTopic(), 1)
 }
 
 func timeoutCtx(ctx context.Context, d time.Duration) (context.Context, context.CancelFunc) {
@@ -117,7 +117,7 @@ func (c *ServerSideClient) Survey(ctx context.Context, req *apiv1.SurveyRequest)
 	replyCh := make(chan *message.Reply, req.ExpectReplies)
 	c.replyAwaiter[id] = replyCh
 	c.mu.Unlock()
-	if err := c.hub.Server.Publish(req.Topic, bs, false, 0); err != nil {
+	if err := c.node.Server.Publish(req.Topic, bs, false, 0); err != nil {
 		return nil, err
 	}
 	defer func() {
@@ -171,7 +171,7 @@ func (c *ServerSideClient) Survey(ctx context.Context, req *apiv1.SurveyRequest)
 
 // Publish 发布消息
 func (c *ServerSideClient) Publish(ctx context.Context, pub *apiv1.PublishRequest) (*apiv1.PublishReply, error) {
-	if c.hub == nil {
+	if c.node == nil {
 		return nil, errors.New("api client not initialized")
 	}
 
@@ -195,7 +195,7 @@ func (c *ServerSideClient) Publish(ctx context.Context, pub *apiv1.PublishReques
 			Message: err.Error(),
 		}}, nil
 	} else {
-		if err := c.hub.Publish(pub.Topic, data, pub.Retain, byte(pub.Qos)); err != nil {
+		if err := c.node.Publish(pub.Topic, data, pub.Retain, byte(pub.Qos)); err != nil {
 			return &apiv1.PublishReply{Error: &apiv1.Error{
 				Code:    500,
 				Message: err.Error(),
@@ -207,7 +207,7 @@ func (c *ServerSideClient) Publish(ctx context.Context, pub *apiv1.PublishReques
 
 // Subscribe 服务端订阅
 func (c *ServerSideClient) Subscribe(ctx context.Context, req *apiv1.SubscribeRequest) (*apiv1.SubscribeReply, error) {
-	if c.hub == nil {
+	if c.node == nil {
 		return nil, errors.New("api client not initialized")
 	}
 	if err := c.broker.Subscribe(&broker.Subscription{
@@ -224,7 +224,7 @@ func (c *ServerSideClient) Subscribe(ctx context.Context, req *apiv1.SubscribeRe
 
 // Unsubscribe 服务端取消订阅
 func (c *ServerSideClient) Unsubscribe(ctx context.Context, req *apiv1.UnsubscribeRequest) (*apiv1.UnsubscribeReply, error) {
-	if c.hub == nil {
+	if c.node == nil {
 		return nil, errors.New("api client not initialized")
 	}
 	if err := c.broker.Unsubscribe(&broker.Subscription{
@@ -241,15 +241,15 @@ func (c *ServerSideClient) Unsubscribe(ctx context.Context, req *apiv1.Unsubscri
 // Disconnect 断开客户端连接
 func (c *ServerSideClient) Disconnect(ctx context.Context, req *apiv1.DisconnectRequest) (*apiv1.DisconnectReply, error) {
 
-	if c.hub == nil {
+	if c.node == nil {
 		return nil, errors.New("api client not initialized")
 	}
 
-	cl, ok := c.hub.Server.Clients.Get(req.Client)
+	cl, ok := c.node.Server.Clients.Get(req.Client)
 	if !ok {
 		return nil, nil
 	}
-	if err := c.hub.Server.DisconnectClient(cl, packets.CodeDisconnect); err != nil {
+	if err := c.node.Server.DisconnectClient(cl, packets.CodeDisconnect); err != nil {
 		return nil, err
 	}
 

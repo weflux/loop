@@ -1,6 +1,7 @@
 package grpcbroker
 
 import (
+	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/weflux/loop"
 	"github.com/weflux/loop/cluster/broker"
 	"github.com/weflux/loop/cluster/eventhandler"
@@ -9,19 +10,27 @@ import (
 var _ eventhandler.EventHandler = new(Handler)
 
 type Handler struct {
-	hub    *loop.Hub
+	node   *loop.Node
 	broker *GrpcBroker
 }
 
-func NewHandler(hub *loop.Hub, b *GrpcBroker) *Handler {
+func (h *Handler) OnDisconnect(client string, broker string) error {
+	if cl, ok := h.node.Clients.Get(client); ok {
+		return h.node.DisconnectClient(cl, packets.CodeDisconnect)
+	}
+
+	return nil
+}
+
+func NewHandler(node *loop.Node, b *GrpcBroker) *Handler {
 	return &Handler{
-		hub:    hub,
+		node:   node,
 		broker: b,
 	}
 }
 
 func (h *Handler) OnPublish(pub *broker.Publication) error {
-	return h.hub.Publish(pub.TopicName, pub.Payload, pub.Retain, pub.Qos)
+	return h.node.Publish(pub.TopicName, pub.Payload, pub.Retain, pub.Qos)
 }
 
 func (h *Handler) OnClientJoin(ch string, info *broker.ClientInfo) error {
@@ -51,16 +60,16 @@ func (h *Handler) OnUnsubscribe(sub *broker.Subscription) error {
 }
 
 func (h *Handler) OnSubscribeClient(sub *broker.Subscription) error {
-	if cl, ok := h.hub.Clients.Get(sub.Client); ok {
-		return h.hub.SubscribeClient(cl, sub.Filter, sub.Qos)
+	if cl, ok := h.node.Clients.Get(sub.Client); ok {
+		return h.node.SubscribeClient(cl, sub.Filter, sub.Qos)
 	}
 
 	return nil
 }
 
 func (h *Handler) OnUnsubscribeClient(sub *broker.Subscription) error {
-	if cl, ok := h.hub.Clients.Get(sub.Client); ok {
-		return h.hub.UnsubscribeClient(cl, sub.Filter)
+	if cl, ok := h.node.Clients.Get(sub.Client); ok {
+		return h.node.UnsubscribeClient(cl, sub.Filter)
 	}
 	return nil
 }

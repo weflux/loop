@@ -20,4 +20,6 @@ type EventHandler interface {
 	OnSubscribeClient(sub *broker.Subscription) error
 
 	OnUnsubscribeClient(sub *broker.Subscription) error
+
+	OnDisconnect(client string, broker string) error
 }

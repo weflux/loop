@@ -714,32 +714,32 @@ func file_broker_broker_proto_rawDescGZIP() []byte {
 
 var file_broker_broker_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_broker_broker_proto_goTypes = []interface{}{
-	(*ClientInfo)(nil),         // 0: loop.hub.broker.ClientInfo
-	(*Command)(nil),            // 1: loop.hub.broker.Command
-	(*PublishRequest)(nil),     // 2: loop.hub.broker.PublishRequest
-	(*PublishReply)(nil),       // 3: loop.hub.broker.PublishReply
-	(*SubscribeRequest)(nil),   // 4: loop.hub.broker.SubscribeRequest
-	(*SubscribeReply)(nil),     // 5: loop.hub.broker.SubscribeReply
-	(*UnsubscribeRequest)(nil), // 6: loop.hub.broker.UnsubscribeRequest
-	(*UnsubscribeReply)(nil),   // 7: loop.hub.broker.UnsubscribeReply
-	(*DisconnectRequest)(nil),  // 8: loop.hub.broker.DisconnectRequest
-	(*DisconnectReply)(nil),    // 9: loop.hub.broker.DisconnectReply
-	(*shared.Metadata)(nil),    // 10: loop.hub.shared.Metadata
+	(*ClientInfo)(nil),         // 0: loop.broker.ClientInfo
+	(*Command)(nil),            // 1: loop.broker.Command
+	(*PublishRequest)(nil),     // 2: loop.broker.PublishRequest
+	(*PublishReply)(nil),       // 3: loop.broker.PublishReply
+	(*SubscribeRequest)(nil),   // 4: loop.broker.SubscribeRequest
+	(*SubscribeReply)(nil),     // 5: loop.broker.SubscribeReply
+	(*UnsubscribeRequest)(nil), // 6: loop.broker.UnsubscribeRequest
+	(*UnsubscribeReply)(nil),   // 7: loop.broker.UnsubscribeReply
+	(*DisconnectRequest)(nil),  // 8: loop.broker.DisconnectRequest
+	(*DisconnectReply)(nil),    // 9: loop.broker.DisconnectReply
+	(*shared.Metadata)(nil),    // 10: loop.shared.Metadata
 }
 var file_broker_broker_proto_depIdxs = []int32{
-	10, // 0: loop.hub.broker.PublishRequest.metadata:type_name -> loop.hub.shared.Metadata
-	2,  // 1: loop.hub.broker.Broker.Publish:input_type -> loop.hub.broker.PublishRequest
-	4,  // 2: loop.hub.broker.Broker.Subscribe:input_type -> loop.hub.broker.SubscribeRequest
-	4,  // 3: loop.hub.broker.Broker.SubscribeClient:input_type -> loop.hub.broker.SubscribeRequest
-	6,  // 4: loop.hub.broker.Broker.Unsubscribe:input_type -> loop.hub.broker.UnsubscribeRequest
-	6,  // 5: loop.hub.broker.Broker.UnsubscribeClient:input_type -> loop.hub.broker.UnsubscribeRequest
-	8,  // 6: loop.hub.broker.Broker.DisconnectClient:input_type -> loop.hub.broker.DisconnectRequest
-	3,  // 7: loop.hub.broker.Broker.Publish:output_type -> loop.hub.broker.PublishReply
-	5,  // 8: loop.hub.broker.Broker.Subscribe:output_type -> loop.hub.broker.SubscribeReply
-	5,  // 9: loop.hub.broker.Broker.SubscribeClient:output_type -> loop.hub.broker.SubscribeReply
-	7,  // 10: loop.hub.broker.Broker.Unsubscribe:output_type -> loop.hub.broker.UnsubscribeReply
-	7,  // 11: loop.hub.broker.Broker.UnsubscribeClient:output_type -> loop.hub.broker.UnsubscribeReply
-	9,  // 12: loop.hub.broker.Broker.DisconnectClient:output_type -> loop.hub.broker.DisconnectReply
+	10, // 0: loop.broker.PublishRequest.metadata:type_name -> loop.shared.Metadata
+	2,  // 1: loop.broker.Broker.Publish:input_type -> loop.broker.PublishRequest
+	4,  // 2: loop.broker.Broker.Subscribe:input_type -> loop.broker.SubscribeRequest
+	4,  // 3: loop.broker.Broker.SubscribeClient:input_type -> loop.broker.SubscribeRequest
+	6,  // 4: loop.broker.Broker.Unsubscribe:input_type -> loop.broker.UnsubscribeRequest
+	6,  // 5: loop.broker.Broker.UnsubscribeClient:input_type -> loop.broker.UnsubscribeRequest
+	8,  // 6: loop.broker.Broker.DisconnectClient:input_type -> loop.broker.DisconnectRequest
+	3,  // 7: loop.broker.Broker.Publish:output_type -> loop.broker.PublishReply
+	5,  // 8: loop.broker.Broker.Subscribe:output_type -> loop.broker.SubscribeReply
+	5,  // 9: loop.broker.Broker.SubscribeClient:output_type -> loop.broker.SubscribeReply
+	7,  // 10: loop.broker.Broker.Unsubscribe:output_type -> loop.broker.UnsubscribeReply
+	7,  // 11: loop.broker.Broker.UnsubscribeClient:output_type -> loop.broker.UnsubscribeReply
+	9,  // 12: loop.broker.Broker.DisconnectClient:output_type -> loop.broker.DisconnectReply
 	7,  // [7:13] is the sub-list for method output_type
 	1,  // [1:7] is the sub-list for method input_type
 	1,  // [1:1] is the sub-list for extension type_name

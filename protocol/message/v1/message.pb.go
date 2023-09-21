@@ -611,26 +611,26 @@ func file_message_v1_message_proto_rawDescGZIP() []byte {
 
 var file_message_v1_message_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_message_v1_message_proto_goTypes = []interface{}{
-	(*Message)(nil),         // 0: loop.hub.message.Message
-	(*Request)(nil),         // 1: loop.hub.message.Request
-	(*Reply)(nil),           // 2: loop.hub.message.Reply
-	(*SubRefresh)(nil),      // 3: loop.hub.message.SubRefresh
-	(*SubRefreshReply)(nil), // 4: loop.hub.message.SubRefreshReply
-	(*Error)(nil),           // 5: loop.hub.message.Error
-	(*Publication)(nil),     // 6: loop.hub.message.Publication
-	nil,                     // 7: loop.hub.message.Message.HeadersEntry
-	nil,                     // 8: loop.hub.message.Error.ExtrasEntry
-	(*shared.Metadata)(nil), // 9: loop.hub.shared.Metadata
+	(*Message)(nil),         // 0: loop.message.Message
+	(*Request)(nil),         // 1: loop.message.Request
+	(*Reply)(nil),           // 2: loop.message.Reply
+	(*SubRefresh)(nil),      // 3: loop.message.SubRefresh
+	(*SubRefreshReply)(nil), // 4: loop.message.SubRefreshReply
+	(*Error)(nil),           // 5: loop.message.Error
+	(*Publication)(nil),     // 6: loop.message.Publication
+	nil,                     // 7: loop.message.Message.HeadersEntry
+	nil,                     // 8: loop.message.Error.ExtrasEntry
+	(*shared.Metadata)(nil), // 9: loop.shared.Metadata
 }
 var file_message_v1_message_proto_depIdxs = []int32{
-	7, // 0: loop.hub.message.Message.headers:type_name -> loop.hub.message.Message.HeadersEntry
-	1, // 1: loop.hub.message.Message.request:type_name -> loop.hub.message.Request
-	2, // 2: loop.hub.message.Message.reply:type_name -> loop.hub.message.Reply
-	6, // 3: loop.hub.message.Message.publication:type_name -> loop.hub.message.Publication
-	5, // 4: loop.hub.message.Message.error:type_name -> loop.hub.message.Error
-	5, // 5: loop.hub.message.Reply.error:type_name -> loop.hub.message.Error
-	9, // 6: loop.hub.message.Reply.metadata:type_name -> loop.hub.shared.Metadata
-	8, // 7: loop.hub.message.Error.extras:type_name -> loop.hub.message.Error.ExtrasEntry
+	7, // 0: loop.message.Message.headers:type_name -> loop.message.Message.HeadersEntry
+	1, // 1: loop.message.Message.request:type_name -> loop.message.Request
+	2, // 2: loop.message.Message.reply:type_name -> loop.message.Reply
+	6, // 3: loop.message.Message.publication:type_name -> loop.message.Publication
+	5, // 4: loop.message.Message.error:type_name -> loop.message.Error
+	5, // 5: loop.message.Reply.error:type_name -> loop.message.Error
+	9, // 6: loop.message.Reply.metadata:type_name -> loop.shared.Metadata
+	8, // 7: loop.message.Error.extras:type_name -> loop.message.Error.ExtrasEntry
 	8, // [8:8] is the sub-list for method output_type
 	8, // [8:8] is the sub-list for method input_type
 	8, // [8:8] is the sub-list for extension type_name

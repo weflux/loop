@@ -10,8 +10,8 @@ import (
 
 func Test_NewHub(t *testing.T) {
 
-	hub := NewHub(option.Options{}, &slog.Logger{})
-	err := hub.Start(context.Background())
+	node := NewNode(option.Options{}, &slog.Logger{})
+	err := node.Start(context.Background())
 	require.NoError(t, err)
 
 }

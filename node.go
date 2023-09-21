@@ -9,30 +9,31 @@ import (
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/weflux/loop/cluster/broker"
 	"github.com/weflux/loop/hook"
-	"github.com/weflux/loop/membroker"
 	"github.com/weflux/loop/option"
 	"github.com/weflux/loop/proxy"
 	"log"
 	"log/slog"
 )
 
-type Hub struct {
+type Node struct {
 	*mqtt.Server
-	broker broker.Broker
-	logger *slog.Logger
+	broker           broker.Broker
+	logger           *slog.Logger
+	serverSideClient *ServerSideClient
 }
 
-func (h *Hub) Start(_ context.Context) error {
-	h.logger.Info("hub server starting")
+func (h *Node) Start(_ context.Context) error {
+	h.logger.Info("node server starting")
+	h.serverSideClient = newServerSideClient(h, h.broker, h.logger)
 	return h.Serve()
 }
 
-func (h *Hub) Stop(_ context.Context) error {
-	h.logger.Info("hub server stopping")
+func (h *Node) Stop(_ context.Context) error {
+	h.logger.Info("node server stopping")
 	return h.Close()
 }
 
-func (h *Hub) SubscribeClient(cl *mqtt.Client, filter string, qos byte) error {
+func (h *Node) SubscribeClient(cl *mqtt.Client, filter string, qos byte) error {
 	// 需要注意是否正确，待测试
 	pk := packets.Packet{
 		FixedHeader: packets.FixedHeader{
@@ -54,7 +55,7 @@ func (h *Hub) SubscribeClient(cl *mqtt.Client, filter string, qos byte) error {
 	return nil
 }
 
-func (h *Hub) UnsubscribeClient(cl *mqtt.Client, filter string) error {
+func (h *Node) UnsubscribeClient(cl *mqtt.Client, filter string) error {
 	// 需要注意是否正确，待测试
 	pk := packets.Packet{
 		FixedHeader: packets.FixedHeader{
@@ -74,10 +75,10 @@ func (h *Hub) UnsubscribeClient(cl *mqtt.Client, filter string) error {
 	return nil
 }
 
-func NewHub(
+func NewNode(
 	conf option.Options,
 	slogger *slog.Logger,
-) *Hub {
+) *Node {
 	s := mqtt.New(&mqtt.Options{
 		InlineClient: true,
 		Logger:       slogger,
@@ -116,11 +117,9 @@ func NewHub(
 		}
 	}
 
-	var b broker.Broker
-	if b = conf.Broker; b != nil {
-		b = conf.Broker
-	} else {
-		b = membroker.NewMemBroker(slogger)
+	var b = conf.Broker
+	if b == nil {
+		panic("Options.Broker must not be nil")
 	}
 
 	bh := hook.NewBroker(b, slogger)
@@ -149,15 +148,16 @@ func NewHub(
 		}
 	}
 
-	hub := &Hub{
+	node := &Node{
 		Server: s,
 		logger: slogger,
 		broker: b,
 	}
 
-	return hub
+	return node
 }
 
-func (h *Hub) ServerSideClient() *ServerSideClient {
-	return newServerSideClient(h, h.broker, h.logger)
+func (h *Node) ServerSideClient() *ServerSideClient {
+	//return newServerSideClient(h, h.broker, h.logger)
+	return h.serverSideClient
 }
