@@ -2,8 +2,8 @@ package proxy
 
 import (
 	"context"
-	"github.com/weflux/loop"
 	"github.com/weflux/loop/contenttype"
+	"github.com/weflux/loop/option"
 	proxypb "github.com/weflux/loop/protocol/proxy"
 	"net/url"
 )
@@ -12,7 +12,8 @@ type ConnectProxy interface {
 	ProxyConnect(ctx context.Context, req *proxypb.ConnectRequest) (*proxypb.ConnectReply, error)
 }
 
-func NewConnectProxy(c *loop.RouteOption) ConnectProxy {
+func NewConnectProxy(c *option.RouteOption) ConnectProxy {
+
 	endpoint := c.Endpoint
 	uri, err := url.Parse(endpoint)
 	if err != nil {

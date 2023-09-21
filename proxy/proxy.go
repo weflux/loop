@@ -1,7 +1,7 @@
 package proxy
 
 import (
-	"github.com/weflux/loop"
+	"github.com/weflux/loop/option"
 )
 
 //goland:noinspection GoNameStartsWithPackageName
@@ -11,7 +11,7 @@ type ProxyMap struct {
 	RPCProxies     map[string]RPCProxy
 }
 
-func NewProxyMap(opts *loop.ProxyOption) *ProxyMap {
+func NewProxyMap(opts *option.ProxyOption) *ProxyMap {
 	var connectProxy ConnectProxy
 
 	if opts.Connect != nil {

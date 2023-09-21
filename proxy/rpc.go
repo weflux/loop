@@ -2,8 +2,8 @@ package proxy
 
 import (
 	"context"
-	"github.com/weflux/loop"
 	"github.com/weflux/loop/contenttype"
+	"github.com/weflux/loop/option"
 	proxypb "github.com/weflux/loop/protocol/proxy"
 	"net/url"
 )
@@ -12,7 +12,7 @@ type RPCProxy interface {
 	ProxyRPC(ctx context.Context, req *proxypb.RPCRequest) (*proxypb.RPCReply, error)
 }
 
-func NewRPCProxy(c *loop.RouteOption) RPCProxy {
+func NewRPCProxy(c *option.RouteOption) RPCProxy {
 	endpoint := c.Endpoint
 	uri, err := url.Parse(endpoint)
 	if err != nil {

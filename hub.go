@@ -7,8 +7,10 @@ import (
 	"github.com/mochi-mqtt/server/v2/hooks/storage/redis"
 	"github.com/mochi-mqtt/server/v2/listeners"
 	"github.com/mochi-mqtt/server/v2/packets"
-	"github.com/weflux/loop/broker"
+	"github.com/weflux/loop/cluster/broker"
 	"github.com/weflux/loop/hook"
+	"github.com/weflux/loop/membroker"
+	"github.com/weflux/loop/option"
 	"github.com/weflux/loop/proxy"
 	"log"
 	"log/slog"
@@ -73,7 +75,7 @@ func (h *Hub) UnsubscribeClient(cl *mqtt.Client, filter string) error {
 }
 
 func NewHub(
-	conf Options,
+	conf option.Options,
 	slogger *slog.Logger,
 ) *Hub {
 	s := mqtt.New(&mqtt.Options{
@@ -115,10 +117,10 @@ func NewHub(
 	}
 
 	var b broker.Broker
-	if b := conf.Broker; b != nil {
+	if b = conf.Broker; b != nil {
 		b = conf.Broker
 	} else {
-		b = broker.NewMemBroker(slogger)
+		b = membroker.NewMemBroker(slogger)
 	}
 
 	bh := hook.NewBroker(b, slogger)
@@ -127,6 +129,9 @@ func NewHub(
 	}
 
 	c := conf.MQTT
+	if c == nil {
+		panic("config mqtt must not null")
+	}
 	if c.TCP == nil && c.WebSocket == nil {
 		panic("config mqtt.tcp/mqtt.websocket must not null")
 	}

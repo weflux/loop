@@ -1,8 +1,8 @@
-package loop
+package option
 
 import (
 	mqtt "github.com/mochi-mqtt/server/v2"
-	"github.com/weflux/loop/broker"
+	"github.com/weflux/loop/cluster/broker"
 )
 
 type Options struct {
