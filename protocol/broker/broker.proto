@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package loop.hub.broker;
+
+
+option go_package = "protocol/broker;brokerpb";
+
+import "shared/shared.proto";
+
+//message Publication {
+//  uint32 id = 1;
+//  string topic = 2;
+//  bool retain = 3;
+//  int32 qos = 4;
+//  bytes payload = 7;
+//}
+
+message ClientInfo {
+  string client = 1;
+  string session = 2;
+  string user = 3;
+  string broker = 4;
+}
+
+
+message Command {
+  string id = 1;
+  string type = 2;
+  string content_type = 3;
+  string payload_text = 5;
+  bytes payload_bytes = 6;
+}
+
+message PublishRequest {
+  uint32 id = 1;
+  string topic = 2;
+  bool retain = 3;
+  int32 qos = 4;
+  shared.Metadata metadata = 5;
+  bytes payload = 9;
+}
+
+message PublishReply {
+
+}
+
+
+message SubscribeRequest {
+  string id = 1;
+  string topic = 2;
+  string client = 3;
+  int32 qos = 4;
+  string broker = 5;
+}
+
+message SubscribeReply {
+
+}
+
+message UnsubscribeRequest {
+  string id = 1;
+  string topic = 2;
+  string client = 3;
+  int32 qos = 4;
+  string broker = 5;
+}
+
+message UnsubscribeReply {
+
+}
+
+message DisconnectRequest {
+
+}
+
+message DisconnectReply {
+
+}
+
+service Broker {
+  rpc Publish(PublishRequest) returns (PublishReply) {}
+  rpc Subscribe(SubscribeRequest) returns (SubscribeReply) {}
+  rpc SubscribeClient(SubscribeRequest) returns (SubscribeReply) {}
+  rpc Unsubscribe(UnsubscribeRequest) returns (UnsubscribeReply) {}
+  rpc UnsubscribeClient(UnsubscribeRequest) returns (UnsubscribeReply) {}
+  rpc DisconnectClient(DisconnectRequest) returns (DisconnectReply) {}
+}

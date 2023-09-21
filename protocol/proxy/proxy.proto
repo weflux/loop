@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package loop.hub.proxy;
+
+import "shared/shared.proto";
+
+option go_package = "protocol/proxy;proxypb";
+
+
+service Proxy {
+  rpc Connect(ConnectRequest) returns (ConnectReply) {}
+  rpc Subscribe(SubscribeRequest) returns (SubscribeReply) {}
+  rpc RPC(RPCRequest) returns (RPCReply) {}
+  rpc Publish(PublishRequest) returns (PublishReply) {}
+  rpc Refresh(RefreshRequest) returns (RefreshReply) {}
+  rpc SubRefresh(SubscribeRequest) returns (SubRefreshReply) {}
+}
+
+message Error {
+  int32 code = 1;
+  string message = 2;
+  bool temporary = 3;
+  Disconnect disconnect = 4;
+}
+
+message Disconnect {
+  uint32 code = 1;
+  string reason = 2;
+}
+
+
+
+message ConnectRequest {
+
+  message Payload {
+    string username = 1;
+    string password = 2;
+  }
+
+  string id = 1;
+  shared.Metadata metadata = 2;
+  Payload payload = 3;
+}
+
+message ConnectReply {
+  Error error = 1;
+}
+
+message SubscribeRequest {
+
+}
+
+message SubscribeReply {
+
+}
+
+message RPCRequest {
+  string id = 1;
+  shared.Metadata metadata = 2;
+  string command = 3;
+  string content_type = 4;
+  string payload_text = 5;
+  bytes payload_bytes = 6;
+
+}
+
+message RPCReply {
+  string id = 1;
+  Error error = 2;
+  shared.Metadata metadata = 3;
+  string content_type = 4;
+  string payload_text = 5;
+  bytes payload_bytes = 6;
+}
+
+message PublishRequest {
+
+}
+
+message PublishReply {
+
+}
+
+message RefreshRequest {
+
+}
+
+message RefreshReply {
+
+}
+
+message SubRefreshRequest {
+
+}
+
+message SubRefreshReply {
+
+}

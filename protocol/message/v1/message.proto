@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package loop.hub.message;
+
+import "shared/shared.proto";
+
+option go_package = "protocol/message/v1;message";
+
+message Message {
+  string id = 1 [json_name = "id"];
+  map<string, string> headers = 3;
+  oneof body {
+    Request request = 4 [json_name = "request"];
+    Reply reply = 5 [json_name = "reply"];
+    Publication publication = 6 [json_name = "publication"];
+    Error error = 10 [json_name = "error"];
+  }
+}
+
+message Request {
+  string command = 1;
+  string content_type = 2 [json_name = "content_type"];
+  string payload_text = 3 [json_name = "payload_text"];
+  bytes payload_bytes = 4 [json_name = "payload_bytes"];
+}
+
+message Reply {
+  Error error = 1 [json_name = "error"];
+  shared.Metadata metadata = 2;
+  string command = 3;
+  string content_type = 4 [json_name = "content_type"];
+  string payload_text = 5 [json_name = "payload_text"];
+  bytes payload_bytes = 6 [json_name = "payload_bytes"];
+}
+
+message SubRefresh {
+
+}
+
+message SubRefreshReply {
+
+}
+
+message Error {
+  int32 code = 1;
+  string message = 2;
+  map<string, string> extras = 3;
+}
+
+message Publication {
+  string type = 1;
+  string content_type = 2 [json_name = "content_type"];
+  string payload_text = 3 [json_name = "payload_text"];
+  bytes payload_bytes = 4 [json_name = "payload_bytes"];
+}

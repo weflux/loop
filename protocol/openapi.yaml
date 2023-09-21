@@ -1,0 +1,100 @@
+# Generated with protoc-gen-openapi
+# https://github.com/google/gnostic/tree/master/cmd/protoc-gen-openapi
+
+openapi: 3.0.3
+info:
+    title: Api API
+    version: 0.0.1
+paths:
+    /hub/api/publish:
+        get:
+            tags:
+                - Api
+            operationId: Api_Publish
+            parameters:
+                - name: topicName
+                  in: query
+                  schema:
+                    type: string
+                - name: retain
+                  in: query
+                  schema:
+                    type: boolean
+                - name: qos
+                  in: query
+                  schema:
+                    type: integer
+                    format: int32
+                - name: payload
+                  in: query
+                  schema:
+                    type: string
+                    format: bytes
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/loop.hub.api.PublishReply'
+    /hub/api/rpc:
+        get:
+            tags:
+                - Api
+            operationId: Api_RPC
+            parameters:
+                - name: id
+                  in: query
+                  schema:
+                    type: string
+                - name: route
+                  in: query
+                  schema:
+                    type: string
+                - name: key
+                  in: query
+                  schema:
+                    type: string
+                - name: method
+                  in: query
+                  schema:
+                    type: string
+                - name: payload
+                  in: query
+                  schema:
+                    type: string
+                    format: bytes
+            responses:
+                "200":
+                    description: OK
+                    content:
+                        application/json:
+                            schema:
+                                $ref: '#/components/schemas/loop.hub.api.RPCReply'
+components:
+    schemas:
+        loop.hub.api.PublishReply:
+            type: object
+            properties: {}
+        loop.hub.api.RPCReply:
+            type: object
+            properties:
+                id:
+                    type: string
+                method:
+                    type: string
+                error:
+                    $ref: '#/components/schemas/loop.hub.api.RPCReply_Error'
+                payload:
+                    type: string
+                    format: bytes
+        loop.hub.api.RPCReply_Error:
+            type: object
+            properties:
+                error:
+                    type: integer
+                    format: int32
+                message:
+                    type: string
+tags:
+    - name: Api
