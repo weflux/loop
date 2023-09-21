@@ -1,25 +1,27 @@
-package loop
+package grpcbroker
 
-import "github.com/weflux/loop/broker"
+import (
+	"github.com/weflux/loop"
+	"github.com/weflux/loop/cluster/broker"
+	"github.com/weflux/loop/cluster/eventhandler"
+)
 
-var _ broker.EventHandler = new(Handler)
+var _ eventhandler.EventHandler = new(Handler)
 
 type Handler struct {
-	hub     *Hub
-	routing *broker.RoutingTable
-	broker  broker.Broker
+	hub    *loop.Hub
+	broker *GrpcBroker
 }
 
-func NewHandler(hub *Hub, rtable *broker.RoutingTable, broker broker.Broker) *Handler {
+func NewHandler(hub *loop.Hub, b *GrpcBroker) *Handler {
 	return &Handler{
-		hub:     hub,
-		routing: rtable,
-		broker:  broker,
+		hub:    hub,
+		broker: b,
 	}
 }
 
 func (h *Handler) OnPublish(pub *broker.Publication) error {
-	return h.hub.Publish(pub.TopicName, pub.Payload, pub.Retain, byte(pub.Qos))
+	return h.hub.Publish(pub.TopicName, pub.Payload, pub.Retain, pub.Qos)
 }
 
 func (h *Handler) OnClientJoin(ch string, info *broker.ClientInfo) error {
@@ -36,14 +38,14 @@ func (h *Handler) OnControl(cmd *broker.Command) error {
 
 func (h *Handler) OnSubscribe(sub *broker.Subscription) error {
 	if h.broker.ID() != sub.Broker {
-		return h.routing.Subscribe(sub.Filter, sub.Client, sub.Broker)
+		return h.broker.routing.Subscribe(sub.Filter, sub.Client, sub.Broker)
 	}
 	return nil
 }
 
 func (h *Handler) OnUnsubscribe(sub *broker.Subscription) error {
 	if h.broker.ID() != sub.Broker {
-		return h.routing.Unsubscribe(sub.Filter, sub.Client, sub.Broker)
+		return h.broker.routing.Unsubscribe(sub.Filter, sub.Client, sub.Broker)
 	}
 	return nil
 }

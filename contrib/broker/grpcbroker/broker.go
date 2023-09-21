@@ -1,4 +1,4 @@
-package grpc
+package grpcbroker
 
 import (
 	"context"
@@ -6,7 +6,7 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/hashicorp/go-multierror"
-	"github.com/weflux/loop/broker"
+	"github.com/weflux/loop/cluster/broker"
 	brokerpb "github.com/weflux/loop/protocol/broker"
 	shared "github.com/weflux/loop/protocol/shared"
 	"github.com/weflux/loop/registry"
@@ -27,7 +27,7 @@ type Options struct {
 	ServiceVersion string
 }
 
-func NewGrpcBroker(dis registry.Discovery, opts Options, logger *slog.Logger) *GrpcBroker {
+func NewBroker(opts Options, dis registry.Discovery, logger *slog.Logger) *GrpcBroker {
 	b := &GrpcBroker{
 		dis:             dis,
 		mu:              sync.RWMutex{},
@@ -35,10 +35,8 @@ func NewGrpcBroker(dis registry.Discovery, opts Options, logger *slog.Logger) *G
 		opts:            opts,
 		logger:          logger,
 		grpcServiceName: fmt.Sprintf("%s.grpc", opts.ServiceName),
+		routing:         broker.NewRoutingTable(),
 	}
-	//b.ctx, b.cancelCtx = context.WithCancel(context.Background())
-
-	//go b.Start(b.ctx)
 
 	return b
 }
@@ -52,6 +50,7 @@ type GrpcBroker struct {
 	ctx             context.Context
 	cancelCtx       context.CancelFunc
 	logger          *slog.Logger
+	routing         *broker.RoutingTable
 	grpcServiceName string
 }
 
