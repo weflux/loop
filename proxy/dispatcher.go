@@ -5,7 +5,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"github.com/weflux/loop/misc/contenttype"
+	"github.com/weflux/loop/contenttype"
 	proxypb "github.com/weflux/loop/protocol/proxy"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"

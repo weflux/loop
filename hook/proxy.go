@@ -7,13 +7,13 @@ import (
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/samber/lo"
-	"github.com/weflux/loop/misc/clientutil"
-	"github.com/weflux/loop/misc/errcodes"
-	"github.com/weflux/loop/misc/topicutil"
+	"github.com/weflux/loop/errcodes"
 	message "github.com/weflux/loop/protocol/message/v1"
 	proxypb "github.com/weflux/loop/protocol/proxy"
 	shared "github.com/weflux/loop/protocol/shared"
 	"github.com/weflux/loop/proxy"
+	"github.com/weflux/loop/utils/clientutil"
+	"github.com/weflux/loop/utils/topicutil"
 	"log/slog"
 )
 

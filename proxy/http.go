@@ -3,7 +3,7 @@ package proxy
 import (
 	"bytes"
 	"errors"
-	"github.com/weflux/loop/misc/contenttype"
+	"github.com/weflux/loop/contenttype"
 	"google.golang.org/protobuf/proto"
 	"io"
 	"net/http"

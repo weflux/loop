@@ -5,8 +5,8 @@ import (
 	"fmt"
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
-	"github.com/weflux/loop/misc/packetutil"
 	"github.com/weflux/loop/proxy"
+	"github.com/weflux/loop/utils/packetutil"
 )
 
 type Auth struct {

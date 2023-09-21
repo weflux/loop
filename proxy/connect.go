@@ -3,7 +3,7 @@ package proxy
 import (
 	"context"
 	"github.com/weflux/loop"
-	"github.com/weflux/loop/misc/contenttype"
+	"github.com/weflux/loop/contenttype"
 	proxypb "github.com/weflux/loop/protocol/proxy"
 	"net/url"
 )
