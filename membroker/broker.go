@@ -2,16 +2,15 @@ package membroker
 
 import (
 	"context"
-	"github.com/weflux/loop/cluster/broker"
-	"github.com/weflux/loop/cluster/eventhandler"
+	"github.com/weflux/loop/broker"
 	"log/slog"
 )
 
 var _ broker.Broker = new(MemBroker)
 
 type MemBroker struct {
-	logger  *slog.Logger
-	handler eventhandler.EventHandler
+	logger *slog.Logger
+	queue  *Queue
 }
 
 func (b *MemBroker) Stop(ctx context.Context) error {
@@ -23,56 +22,59 @@ func (b *MemBroker) ID() string {
 }
 
 func (b *MemBroker) SubscribeClient(sub *broker.Subscription) error {
-	return b.handler.OnSubscribeClient(sub)
+	b.queue.SubscribeClient <- sub
+	return nil
 }
 
 func (b *MemBroker) UnsubscribeClient(sub *broker.Subscription) error {
-	return b.handler.OnUnsubscribeClient(sub)
+	b.queue.UnsubscribeClient <- sub
+	return nil
 }
 
 func (b *MemBroker) DisconnectClient(client *broker.ClientInfo) error {
-	//return b.handler.OnD(sub)
+	b.queue.DisconnectClient <- client
 	return nil
 }
 
 func (b *MemBroker) PublishJoin(ch string, info *broker.ClientInfo) error {
-	//TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func (b *MemBroker) PublishLeave(ch string, info *broker.ClientInfo) error {
-	//TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func (b *MemBroker) PublishControl(cmd *broker.Command) error {
-	//TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func (b *MemBroker) Subscribe(subs []*broker.Subscription) error {
-	return b.handler.OnSubscribe(subs)
+	//b.queue.Subscribe <-
+	for _, sub := range subs {
+		b.queue.Subscribe <- sub
+	}
+	return nil
 }
 
 func (b *MemBroker) Unsubscribe(subs []*broker.Subscription) error {
-	return b.handler.OnUnsubscribe(subs)
+	for _, sub := range subs {
+		b.queue.Unsubscribe <- sub
+	}
+	return nil
 }
 
 func (b *MemBroker) Publish(pub *broker.Publication) error {
-	return b.handler.OnPublish(pub)
+	b.queue.Publish <- pub
+	return nil
 }
 
-func NewMemBroker(logger *slog.Logger) *MemBroker {
+func NewMemBroker(queue *Queue, logger *slog.Logger) *MemBroker {
 	return &MemBroker{
 		logger: logger,
+		queue:  queue,
 	}
 }
 
-func (b *MemBroker) SetHandler(handler eventhandler.EventHandler) {
-	b.handler = handler
-}
-
 func (b *MemBroker) Start(ctx context.Context) error {
-	//b.handler = handlers
 	return nil
 }

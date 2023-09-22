@@ -3,8 +3,8 @@ package grpcbroker
 import (
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/weflux/loop"
-	"github.com/weflux/loop/cluster/broker"
-	"github.com/weflux/loop/cluster/eventhandler"
+	"github.com/weflux/loop/broker"
+	"github.com/weflux/loop/broker/eventhandler"
 )
 
 var _ eventhandler.EventHandler = new(Handler)
