@@ -36,7 +36,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/loop.hub.api.PublishReply'
+                                $ref: '#/components/schemas/loop.api.PublishReply'
     /hub/api/rpc:
         get:
             tags:
@@ -70,13 +70,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/loop.hub.api.RPCReply'
+                                $ref: '#/components/schemas/loop.api.RPCReply'
 components:
     schemas:
-        loop.hub.api.PublishReply:
+        loop.api.PublishReply:
             type: object
             properties: {}
-        loop.hub.api.RPCReply:
+        loop.api.RPCReply:
             type: object
             properties:
                 id:
@@ -84,11 +84,11 @@ components:
                 method:
                     type: string
                 error:
-                    $ref: '#/components/schemas/loop.hub.api.RPCReply_Error'
+                    $ref: '#/components/schemas/loop.api.RPCReply_Error'
                 payload:
                     type: string
                     format: bytes
-        loop.hub.api.RPCReply_Error:
+        loop.api.RPCReply_Error:
             type: object
             properties:
                 error:

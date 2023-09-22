@@ -14,6 +14,9 @@ const (
 	PROTOBUF ContentType = "protobuf"
 )
 
+func (ct ContentType) String() string {
+	return string(ct)
+}
 func (ct ContentType) ToProto() sharedpb.ContentType {
 	c := FromString(string(ct))
 	switch c {

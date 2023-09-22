@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package loop.hub.message;
+package loop.message;
 
 import "shared/shared.proto";
 
