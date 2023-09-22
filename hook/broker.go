@@ -94,11 +94,15 @@ func (h *Broker) OnSubscribe(cl *mqtt.Client, pk packets.Packet) packets.Packet 
 
 // OnSubscribed is called when a client subscribes to one or more filters.
 func (h *Broker) OnSubscribed(cl *mqtt.Client, pk packets.Packet, reasonCodes []byte) {
-	if err := h.broker.Subscribe(&broker.Subscription{
-		Filter: pk.TopicName,
-		Client: cl.ID,
-		//Broker: h.
-	}); err != nil {
+	subs := []*broker.Subscription{}
+	for _, sub := range pk.Filters {
+		subs = append(subs, &broker.Subscription{
+			Filter: sub.Filter,
+			Qos:    sub.Qos,
+			Client: cl.ID,
+		})
+	}
+	if err := h.broker.Subscribe(subs); err != nil {
 		h.logger.Error("on subscribed error", "error", err)
 	}
 }

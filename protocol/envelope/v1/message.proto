@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package loop.message;
+package loop.envelope;
 
 import "shared/shared.proto";
 
-option go_package = "protocol/message/v1;message";
+option go_package = "protocol/envelope/v1;envelope";
 
 message Message {
   string id = 1 [json_name = "id"];

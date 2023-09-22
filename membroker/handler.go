@@ -45,13 +45,17 @@ func (h *MemHandler) OnControl(cmd *broker.Command) error {
 	panic("implement me")
 }
 
-func (h *MemHandler) OnSubscribe(sub *broker.Subscription) error {
-	h.logger.Info("on subscribe", "topic", sub.Filter, "client", sub.Client)
+func (h *MemHandler) OnSubscribe(subs []*broker.Subscription) error {
+	for _, sub := range subs {
+		h.logger.Info("on subscribe", "topic", sub.Filter, "client", sub.Client)
+	}
 	return nil
 }
 
-func (h *MemHandler) OnUnsubscribe(sub *broker.Subscription) error {
-	h.logger.Info("on unsubscribe", "topic", sub.Filter, "client", sub.Client)
+func (h *MemHandler) OnUnsubscribe(subs []*broker.Subscription) error {
+	for _, sub := range subs {
+		h.logger.Info("on unsubscribe", "topic", sub.Filter, "client", sub.Client)
+	}
 	return nil
 }
 

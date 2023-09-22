@@ -18,10 +18,10 @@ type Broker interface {
 	DisconnectClient(client *ClientInfo) error
 
 	// Subscribe 广播订阅消息
-	Subscribe(sub *Subscription) error
+	Subscribe(subs []*Subscription) error
 
 	// Unsubscribe 广播取消订阅消息
-	Unsubscribe(sub *Subscription) error
+	Unsubscribe(subs []*Subscription) error
 
 	Publish(pub *Publication) error
 

@@ -45,16 +45,20 @@ func (h *Handler) OnControl(cmd *broker.Command) error {
 	return nil
 }
 
-func (h *Handler) OnSubscribe(sub *broker.Subscription) error {
-	if h.broker.ID() != sub.Broker {
-		return h.broker.routing.Subscribe(sub.Filter, sub.Client, sub.Broker)
+func (h *Handler) OnSubscribe(subs []*broker.Subscription) error {
+	for _, sub := range subs {
+		if h.broker.ID() != sub.Broker {
+			return h.broker.routing.Subscribe(sub.Filter, sub.Client, sub.Broker)
+		}
 	}
 	return nil
 }
 
-func (h *Handler) OnUnsubscribe(sub *broker.Subscription) error {
-	if h.broker.ID() != sub.Broker {
-		return h.broker.routing.Unsubscribe(sub.Filter, sub.Client, sub.Broker)
+func (h *Handler) OnUnsubscribe(subs []*broker.Subscription) error {
+	for _, sub := range subs {
+		if h.broker.ID() != sub.Broker {
+			return h.broker.routing.Unsubscribe(sub.Filter, sub.Client, sub.Broker)
+		}
 	}
 	return nil
 }

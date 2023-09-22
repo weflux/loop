@@ -4,16 +4,15 @@ import (
 	"fmt"
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
-	"github.com/weflux/loop/protocol/message/v1"
 	"google.golang.org/protobuf/encoding/protojson"
 	"testing"
 )
 
 func TestOneOfMarshalJSON(t *testing.T) {
-	msg := &message.Message{
+	msg := &envelope.Message{
 		Id:      uuid.NewString(),
 		Headers: map[string]string{},
-		Body: &message.Message_Error{Error: &message.Error{
+		Body: &envelope.Message_Error{Error: &envelope.Error{
 			Code:    1001,
 			Message: "error",
 			Extras:  map[string]string{},
@@ -26,11 +25,11 @@ func TestOneOfMarshalJSON(t *testing.T) {
 
 func TestOneOfUnmarshalJSON(t *testing.T) {
 	js := "{\"id\":\"e3d69d3e-3572-4919-815e-beb9c70735f5\", \"encoding\":\"JSON\", \"error\":{\"code\":1001, \"message\":\"error\", \"data\":\"YWJjZGVmZw==\"}}"
-	msg := &message.Message{}
+	msg := &envelope.Message{}
 	err := protojson.Unmarshal([]byte(js), msg)
 	require.NoError(t, err)
 	switch payload := msg.Body.(type) {
-	case *message.Message_Error:
+	case *envelope.Message_Error:
 		require.EqualValues(t, 1001, payload.Error.Code)
 	}
 }

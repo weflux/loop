@@ -33,10 +33,12 @@ func (s *BrokerService) Publish(ctx context.Context, req *brokerpb.PublishReques
 }
 
 func (s *BrokerService) Subscribe(ctx context.Context, req *brokerpb.SubscribeRequest) (*brokerpb.SubscribeReply, error) {
-	if err := s.handler.OnSubscribe(&broker.Subscription{
-		Filter: req.Topic,
-		Qos:    byte(req.Qos),
-		Client: req.Client,
+	if err := s.handler.OnSubscribe([]*broker.Subscription{
+		{
+			Filter: req.Topic,
+			Qos:    byte(req.Qos),
+			Client: req.Client,
+		},
 	}); err != nil {
 		return nil, err
 	}
@@ -46,9 +48,11 @@ func (s *BrokerService) Subscribe(ctx context.Context, req *brokerpb.SubscribeRe
 
 func (s *BrokerService) Unsubscribe(ctx context.Context, req *brokerpb.UnsubscribeRequest) (*brokerpb.UnsubscribeReply, error) {
 
-	if err := s.handler.OnUnsubscribe(&broker.Subscription{
-		Filter: req.Topic,
-		Client: req.Client,
+	if err := s.handler.OnUnsubscribe([]*broker.Subscription{
+		{
+			Filter: req.Topic,
+			Client: req.Client,
+		},
 	}); err != nil {
 		return nil, err
 	}

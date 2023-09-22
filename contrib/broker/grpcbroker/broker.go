@@ -253,40 +253,53 @@ func (b *GrpcBroker) broadcast(sendFn func(cli brokerpb.BrokerClient) error) err
 	return errs
 }
 
-func (b *GrpcBroker) Subscribe(sub *broker.Subscription) error {
-	sendFn := func(cli brokerpb.BrokerClient) error {
-		ctx, cancelCtx := timeoutCtx(b.ctx)
-		defer cancelCtx()
-		if _, err := cli.Subscribe(ctx, &brokerpb.SubscribeRequest{
-			Id:     uuid.NewString(),
-			Topic:  sub.Filter,
-			Client: sub.Client,
-			Qos:    int32(sub.Qos),
-			Broker: b.ID(),
-		}); err != nil {
+func (b *GrpcBroker) Subscribe(subs []*broker.Subscription) error {
+	for _, sub := range subs {
+
+		sendFn := func(cli brokerpb.BrokerClient) error {
+			ctx, cancelCtx := timeoutCtx(b.ctx)
+			defer cancelCtx()
+			if _, err := cli.Subscribe(ctx, &brokerpb.SubscribeRequest{
+				Id:     uuid.NewString(),
+				Topic:  sub.Filter,
+				Client: sub.Client,
+				Qos:    int32(sub.Qos),
+				Broker: b.ID(),
+			}); err != nil {
+				return err
+			}
+			return nil
+		}
+		err := b.broadcast(sendFn)
+		if err != nil {
 			return err
 		}
-		return nil
 	}
-	return b.broadcast(sendFn)
+	return nil
 }
 
-func (b *GrpcBroker) Unsubscribe(sub *broker.Subscription) error {
-	sendFn := func(cli brokerpb.BrokerClient) error {
-		ctx, cancelCtx := timeoutCtx(b.ctx)
-		defer cancelCtx()
-		if _, err := cli.Unsubscribe(ctx, &brokerpb.UnsubscribeRequest{
-			Id:     uuid.NewString(),
-			Topic:  sub.Filter,
-			Client: sub.Client,
-			Qos:    int32(sub.Qos),
-			Broker: b.ID(),
-		}); err != nil {
+func (b *GrpcBroker) Unsubscribe(subs []*broker.Subscription) error {
+	for _, sub := range subs {
+
+		sendFn := func(cli brokerpb.BrokerClient) error {
+			ctx, cancelCtx := timeoutCtx(b.ctx)
+			defer cancelCtx()
+			if _, err := cli.Unsubscribe(ctx, &brokerpb.UnsubscribeRequest{
+				Id:     uuid.NewString(),
+				Topic:  sub.Filter,
+				Client: sub.Client,
+				Qos:    int32(sub.Qos),
+				Broker: b.ID(),
+			}); err != nil {
+				return err
+			}
+			return nil
+		}
+		if err := b.broadcast(sendFn); err != nil {
 			return err
 		}
-		return nil
 	}
-	return b.broadcast(sendFn)
+	return nil
 }
 
 func timeoutCtx(ctx context.Context) (context.Context, context.CancelFunc) {

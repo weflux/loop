@@ -15,8 +15,7 @@ type MemBroker struct {
 }
 
 func (b *MemBroker) Stop(ctx context.Context) error {
-	//TODO implement me
-	panic("implement me")
+	return nil
 }
 
 func (b *MemBroker) ID() string {
@@ -51,12 +50,12 @@ func (b *MemBroker) PublishControl(cmd *broker.Command) error {
 	panic("implement me")
 }
 
-func (b *MemBroker) Subscribe(sub *broker.Subscription) error {
-	return b.handler.OnSubscribe(sub)
+func (b *MemBroker) Subscribe(subs []*broker.Subscription) error {
+	return b.handler.OnSubscribe(subs)
 }
 
-func (b *MemBroker) Unsubscribe(sub *broker.Subscription) error {
-	return b.handler.OnUnsubscribe(sub)
+func (b *MemBroker) Unsubscribe(subs []*broker.Subscription) error {
+	return b.handler.OnUnsubscribe(subs)
 }
 
 func (b *MemBroker) Publish(pub *broker.Publication) error {

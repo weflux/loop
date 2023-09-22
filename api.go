@@ -9,7 +9,7 @@ import (
 	"github.com/weflux/loop/cluster/broker"
 	"github.com/weflux/loop/contenttype"
 	apiv1 "github.com/weflux/loop/protocol/api/v1"
-	"github.com/weflux/loop/protocol/message/v1"
+	"github.com/weflux/loop/protocol/envelope/v1"
 	"github.com/weflux/loop/utils/topicutil"
 	"log/slog"
 	"sync"
@@ -18,7 +18,7 @@ import (
 
 type ServerSideClient struct {
 	node         *Node
-	replyAwaiter map[string]chan *message.Reply
+	replyAwaiter map[string]chan *envelope.Reply
 	mu           sync.Mutex
 	broker       broker.Broker
 	logger       *slog.Logger
@@ -27,7 +27,7 @@ type ServerSideClient struct {
 func newServerSideClient(node *Node, broker broker.Broker, logger *slog.Logger) *ServerSideClient {
 
 	ssc := &ServerSideClient{
-		replyAwaiter: map[string]chan *message.Reply{},
+		replyAwaiter: map[string]chan *envelope.Reply{},
 		mu:           sync.Mutex{},
 		logger:       logger,
 		broker:       broker,
@@ -50,7 +50,7 @@ func (c *ServerSideClient) Start(ctx context.Context) error {
 	}
 	if err := c.node.Subscribe(topicutil.ReplyTopic(), 1, func(cl *mqtt.Client, sub packets.Subscription, pk packets.Packet) {
 		c.logger.Debug("msg", "received reply message", "topic", pk.TopicName)
-		msg := &message.Message{}
+		msg := &envelope.Message{}
 		if err := contenttype.JSON.Unmarshal(pk.Payload, msg); err != nil {
 			c.logger.Error("unmarshal message error ", err)
 			return
@@ -89,11 +89,11 @@ func timeoutCtx(ctx context.Context, d time.Duration) (context.Context, context.
 // Survey Survey 调用
 func (c *ServerSideClient) Survey(ctx context.Context, req *apiv1.SurveyRequest) (*apiv1.SurveyReply, error) {
 	id := uuid.NewString()
-	bs, err := contenttype.JSON.Marshal(&message.Message{
+	bs, err := contenttype.JSON.Marshal(&envelope.Message{
 		Id:      id,
 		Headers: make(map[string]string),
-		Body: &message.Message_Request{
-			Request: &message.Request{
+		Body: &envelope.Message_Request{
+			Request: &envelope.Request{
 				Command:      req.Command,
 				ContentType:  req.ContentType,
 				PayloadBytes: req.PayloadBytes,
@@ -114,7 +114,7 @@ func (c *ServerSideClient) Survey(ctx context.Context, req *apiv1.SurveyRequest)
 	defer cancelCtx()
 	// 将 pub/sub 模式转化为 request/reply 模式
 	c.mu.Lock()
-	replyCh := make(chan *message.Reply, req.ExpectReplies)
+	replyCh := make(chan *envelope.Reply, req.ExpectReplies)
 	c.replyAwaiter[id] = replyCh
 	c.mu.Unlock()
 	if err := c.node.Server.Publish(req.Topic, bs, false, 0); err != nil {
@@ -176,11 +176,11 @@ func (c *ServerSideClient) Publish(ctx context.Context, pub *apiv1.PublishReques
 	}
 
 	//encoder := getEncoder(pub.ContentType)
-	msg := &message.Message{
+	msg := &envelope.Message{
 		Id:      uuid.NewString(),
 		Headers: map[string]string{},
-		Body: &message.Message_Publication{
-			Publication: &message.Publication{
+		Body: &envelope.Message_Publication{
+			Publication: &envelope.Publication{
 				Type:         pub.Type,
 				ContentType:  pub.ContentType,
 				PayloadText:  pub.PayloadText,
@@ -210,11 +210,13 @@ func (c *ServerSideClient) Subscribe(ctx context.Context, req *apiv1.SubscribeRe
 	if c.node == nil {
 		return nil, errors.New("api client not initialized")
 	}
-	if err := c.broker.Subscribe(&broker.Subscription{
-		Filter: req.Filter,
-		Qos:    byte(req.Qos),
-		Client: req.Client,
-		Broker: req.Broker,
+	if err := c.broker.Subscribe([]*broker.Subscription{
+		{
+			Filter: req.Filter,
+			Qos:    byte(req.Qos),
+			Client: req.Client,
+			Broker: req.Broker,
+		},
 	}); err != nil {
 		return nil, err
 	}
@@ -227,10 +229,12 @@ func (c *ServerSideClient) Unsubscribe(ctx context.Context, req *apiv1.Unsubscri
 	if c.node == nil {
 		return nil, errors.New("api client not initialized")
 	}
-	if err := c.broker.Unsubscribe(&broker.Subscription{
-		Filter: req.Filter,
-		Client: req.Client,
-		Broker: req.Broker,
+	if err := c.broker.Unsubscribe([]*broker.Subscription{
+		{
+			Filter: req.Filter,
+			Client: req.Client,
+			Broker: req.Broker,
+		},
 	}); err != nil {
 		return nil, err
 	}

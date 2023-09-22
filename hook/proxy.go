@@ -9,7 +9,7 @@ import (
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/samber/lo"
 	"github.com/weflux/loop/errcodes"
-	"github.com/weflux/loop/protocol/message/v1"
+	"github.com/weflux/loop/protocol/envelope/v1"
 	proxypb "github.com/weflux/loop/protocol/proxy"
 	shared "github.com/weflux/loop/protocol/shared"
 	"github.com/weflux/loop/proxy"
@@ -79,17 +79,27 @@ func (h *Proxy) OnDisconnect(cl *mqtt.Client, err error, expire bool) {
 }
 
 func (h *Proxy) OnSubscribe(cl *mqtt.Client, pk packets.Packet) packets.Packet {
-	h.Log.Debug("on subscribe channel", "client_id", cl.ID, "topic_name", pk.TopicName)
+	topics := []string{}
+	for _, f := range pk.Filters {
+		topics = append(topics, fmt.Sprintf("%s [%d]", f.Filter, f.Qos))
+	}
+	h.Log.Debug("on subscribe channel", "client_id", cl.ID, "topics", topics)
+
 	if h.proxyMap.SubscribeProxy != nil {
 		// TODO
 	} else {
 		return h.HookBase.OnSubscribe(cl, pk)
 	}
-	return packets.Packet{}
+	return pk
 }
 
 func (h *Proxy) OnSubscribed(cl *mqtt.Client, pk packets.Packet, reasonCodes []byte) {
-	h.Log.Debug("on subscribed channel", "client_id", cl.ID, "topic_name", pk.TopicName)
+	topics := []string{}
+	for _, f := range pk.Filters {
+		topics = append(topics, fmt.Sprintf("%s [%d]", f.Filter, f.Qos))
+	}
+	h.Log.Debug("on subscribed channel", "client_id", cl.ID, "topics", topics)
+
 	h.HookBase.OnSubscribed(cl, pk, reasonCodes)
 }
 
@@ -113,7 +123,7 @@ func (h *Proxy) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, e
 	topic := pk.TopicName
 	if p, ok := h.proxyMap.RPCProxies[topic]; ok {
 		ct := clientutil.GetContentType(cl)
-		msg := &message.Message{}
+		msg := &envelope.Message{}
 		if err := ct.Unmarshal(pk.Payload, msg); err != nil {
 			return packets.Packet{}, err
 		}
@@ -174,17 +184,17 @@ func (h *Proxy) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, e
 
 func errorPacket(cl *mqtt.Client, errRep *proxypb.Error, req *proxypb.RPCRequest) packets.Packet {
 	ct := clientutil.GetContentType(cl)
-	var e *message.Error
+	var e *envelope.Error
 	if errRep != nil {
-		e = &message.Error{
+		e = &envelope.Error{
 			Code:    errRep.Code,
 			Message: errRep.Message,
 			Extras:  map[string]string{},
 		}
 	}
-	msg := &message.Message{
+	msg := &envelope.Message{
 		Id: req.Id,
-		Body: &message.Message_Reply{Reply: &message.Reply{
+		Body: &envelope.Message_Reply{Reply: &envelope.Reply{
 			Command: req.Command,
 			Error:   e,
 		}},
@@ -205,19 +215,19 @@ func errorPacket(cl *mqtt.Client, errRep *proxypb.Error, req *proxypb.RPCRequest
 func replyPacket(cl *mqtt.Client, rep *proxypb.RPCReply, req *proxypb.RPCRequest) packets.Packet {
 
 	ct := clientutil.GetContentType(cl)
-	var e *message.Error
+	var e *envelope.Error
 	if rep.Error != nil {
-		e = &message.Error{
+		e = &envelope.Error{
 			Code:    rep.Error.Code,
 			Message: rep.Error.Message,
 			Extras:  map[string]string{},
 		}
 	}
-	msg := &message.Message{
+	msg := &envelope.Message{
 		Id:      rep.Id,
 		Headers: map[string]string{},
-		Body: &message.Message_Reply{
-			Reply: &message.Reply{
+		Body: &envelope.Message_Reply{
+			Reply: &envelope.Reply{
 				Error:        e,
 				Command:      req.Command,
 				ContentType:  rep.ContentType,

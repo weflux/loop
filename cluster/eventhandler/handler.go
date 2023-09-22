@@ -13,9 +13,9 @@ type EventHandler interface {
 	// OnControl to handle received control data.
 	OnControl(cmd *broker.Command) error
 
-	OnSubscribe(sub *broker.Subscription) error
+	OnSubscribe(subs []*broker.Subscription) error
 
-	OnUnsubscribe(sub *broker.Subscription) error
+	OnUnsubscribe(subs []*broker.Subscription) error
 
 	OnSubscribeClient(sub *broker.Subscription) error
 
