@@ -4,12 +4,12 @@ import (
 	"context"
 	rv8 "github.com/go-redis/redis/v8"
 	mqtt "github.com/mochi-mqtt/server/v2"
-	"github.com/mochi-mqtt/server/v2/hooks/storage/badger"
 	"github.com/mochi-mqtt/server/v2/hooks/storage/redis"
 	"github.com/mochi-mqtt/server/v2/listeners"
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/weflux/loop/broker"
 	"github.com/weflux/loop/hook"
+	"github.com/weflux/loop/hook/badgerv4"
 	"github.com/weflux/loop/option"
 	"github.com/weflux/loop/proxy"
 	"log"
@@ -93,7 +93,7 @@ func NewNode(
 	if opts.Store == nil || opts.Store.Mem != nil {
 		//bdopt := badger2.DefaultOptions(".badger")
 		//bdopt.Mem
-		if err := s.AddHook(new(badger.Hook), nil); err != nil {
+		if err := s.AddHook(new(badgerv4.Hook), nil); err != nil {
 			panic(err)
 		}
 	} else if opts.Store != nil && opts.Store.Redis != nil {
