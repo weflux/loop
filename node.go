@@ -130,8 +130,8 @@ func NewNode(
 		panic("Options.Broker must not be nil")
 	}
 
-	bh := hook.NewBroker(b, proxyMap, slogger)
-	if err := s.AddHook(bh, map[string]interface{}{}); err != nil {
+	brokerHook := hook.NewBroker(b, proxyMap, slogger)
+	if err := s.AddHook(brokerHook, map[string]interface{}{}); err != nil {
 		log.Fatal("add mqtt server hook failed", err)
 	}
 
