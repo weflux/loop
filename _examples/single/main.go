@@ -14,7 +14,13 @@ import (
 func main() {
 	opts := option.Options{
 		Store: &option.StoreOption{
-			Mem: &option.MemOption{},
+			//Badger: &option.BadgerOption{},
+			Redis: &option.RedisOption{
+				Addr:     "127.0.0.1:6379",
+				Password: "",
+				DB:       0,
+				Prefix:   "loop.",
+			},
 		},
 		MQTT: &option.MQTTOption{
 			TCP:       &option.MQTTTcpOption{Addr: "0.0.0.0:31000"},

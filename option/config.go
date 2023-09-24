@@ -13,11 +13,11 @@ type Options struct {
 }
 
 type StoreOption struct {
-	Redis *RedisOption `json:"redis"`
-	Mem   *MemOption   `json:"mem"`
+	Redis  *RedisOption  `json:"redis"`
+	Badger *BadgerOption `json:"badger"`
 }
 
-type MemOption struct {
+type BadgerOption struct {
 }
 
 type RedisOption struct {
@@ -33,9 +33,11 @@ type RouteOption struct {
 }
 
 type ProxyOption struct {
-	Connect   *RouteOption            `json:"authenticate"`
-	Subscribe *RouteOption            `json:"subscribe"`
-	RPC       map[string]*RouteOption `json:"rpc"`
+	Connect      *RouteOption            `json:"connect"`
+	Connected    *RouteOption            `json:"connected"`
+	Disconnected *RouteOption            `json:"disconnected"`
+	Subscribe    *RouteOption            `json:"subscribe"`
+	RPC          map[string]*RouteOption `json:"rpc"`
 }
 
 type MQTTOption struct {

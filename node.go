@@ -90,7 +90,7 @@ func NewNode(
 		Logger:       slogger,
 	})
 
-	if opts.Store == nil || opts.Store.Mem != nil {
+	if opts.Store == nil || opts.Store.Badger != nil {
 		//bdopt := badger2.DefaultOptions(".badger")
 		//bdopt.Mem
 		if err := s.AddHook(new(badgerv4.Hook), nil); err != nil {
