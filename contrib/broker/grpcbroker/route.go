@@ -1,4 +1,4 @@
-package broker
+package grpcbroker
 
 import (
 	mqtt "github.com/mochi-mqtt/server/v2"

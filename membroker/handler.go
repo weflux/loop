@@ -3,20 +3,38 @@ package membroker
 import (
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/weflux/loop"
-	"github.com/weflux/loop/cluster/broker"
-	"github.com/weflux/loop/cluster/eventhandler"
+	"github.com/weflux/loop/broker"
+	"github.com/weflux/loop/broker/eventhandler"
 	"log/slog"
 )
 
 var _ eventhandler.EventHandler = new(MemHandler)
 
-func NewMemHandler(node *loop.Node, slogger *slog.Logger) *MemHandler {
-	return &MemHandler{node: node, logger: slogger}
+func NewMemHandler(node *loop.Node, queue *Queue, slogger *slog.Logger) *MemHandler {
+	h := &MemHandler{node: node, queue: queue, logger: slogger}
+	go h.eventLoop()
+	return h
 }
 
 type MemHandler struct {
 	node   *loop.Node
 	logger *slog.Logger
+	queue  *Queue
+}
+
+func (h *MemHandler) eventLoop() {
+	for {
+		select {
+		case pub := <-h.queue.Publish:
+			if err := h.OnPublish(pub); err != nil {
+				h.logger.Error("on publish error", "error", err)
+			}
+		case sub := <-h.queue.Subscribe:
+			if err := h.OnSubscribe([]*broker.Subscription{sub}); err != nil {
+				h.logger.Error("on subscribe error", "error", err)
+			}
+		}
+	}
 }
 
 func (h *MemHandler) OnDisconnect(client string, broker string) error {

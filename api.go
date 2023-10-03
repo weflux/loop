@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
-	"github.com/weflux/loop/cluster/broker"
+	"github.com/weflux/loop/broker"
 	"github.com/weflux/loop/contenttype"
 	apiv1 "github.com/weflux/loop/protocol/api/v1"
 	"github.com/weflux/loop/protocol/envelope/v1"
@@ -49,7 +49,7 @@ func (c *ServerSideClient) Start(ctx context.Context) error {
 		return errors.New("api client not initialized")
 	}
 	if err := c.node.Subscribe(topicutil.ReplyTopic(), 1, func(cl *mqtt.Client, sub packets.Subscription, pk packets.Packet) {
-		c.logger.Debug("msg", "received reply message", "topic", pk.TopicName)
+		c.logger.Debug("received reply message", "topic", pk.TopicName)
 		msg := &envelope.Message{}
 		if err := contenttype.JSON.Unmarshal(pk.Payload, msg); err != nil {
 			c.logger.Error("unmarshal message error ", err)
@@ -62,7 +62,7 @@ func (c *ServerSideClient) Start(ctx context.Context) error {
 			return
 		}
 
-		c.logger.Debug("msg", "received reply", "command", reply.Command)
+		c.logger.Debug("received reply", "command", reply.Command)
 		if ch, ok := c.replyAwaiter[msg.Id]; ok {
 			select {
 			case ch <- reply:

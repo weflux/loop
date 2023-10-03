@@ -5,11 +5,11 @@ import (
 	"errors"
 	"fmt"
 	"github.com/google/uuid"
-	"github.com/hashicorp/go-multierror"
-	"github.com/weflux/loop/cluster/broker"
+	"github.com/weflux/loop/broker"
 	brokerpb "github.com/weflux/loop/protocol/broker"
 	shared "github.com/weflux/loop/protocol/shared"
 	"github.com/weflux/loop/registry"
+	"go.uber.org/multierr"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"log/slog"
@@ -35,7 +35,7 @@ func NewBroker(opts Options, dis registry.Discovery, logger *slog.Logger) *GrpcB
 		opts:            opts,
 		logger:          logger,
 		grpcServiceName: fmt.Sprintf("%s.grpc", opts.ServiceName),
-		routing:         broker.NewRoutingTable(),
+		routing:         NewRoutingTable(),
 	}
 
 	return b
@@ -46,11 +46,10 @@ type GrpcBroker struct {
 	clients         map[string]brokerpb.BrokerClient
 	dis             registry.Discovery
 	opts            Options
-	ClusterTopics   *broker.RoutingTable
 	ctx             context.Context
 	cancelCtx       context.CancelFunc
 	logger          *slog.Logger
-	routing         *broker.RoutingTable
+	routing         *RoutingTable
 	grpcServiceName string
 }
 
@@ -245,7 +244,7 @@ func (b *GrpcBroker) broadcast(sendFn func(cli brokerpb.BrokerClient) error) err
 			defer wg.Done()
 			err := sendFn(cli)
 			if err != nil {
-				errs = multierror.Append(errs, err)
+				errs = multierr.Append(errs, err)
 			}
 		}()
 	}

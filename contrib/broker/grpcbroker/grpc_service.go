@@ -2,8 +2,8 @@ package grpcbroker
 
 import (
 	"context"
-	"github.com/weflux/loop/cluster/broker"
-	"github.com/weflux/loop/cluster/eventhandler"
+	"github.com/weflux/loop/broker"
+	"github.com/weflux/loop/broker/eventhandler"
 	brokerpb "github.com/weflux/loop/protocol/broker"
 )
 

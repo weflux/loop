@@ -39,3 +39,5 @@ bin/
 
 go.sum
 go.work.sum
+
+.badger/
