@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package loop.api;
+package loopin.api;
 
 import "shared/shared.proto";
 import "google/api/annotations.proto";

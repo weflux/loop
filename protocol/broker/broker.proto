@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package loop.broker;
+package loopin.broker;
 
 
 option go_package = "protocol/broker;brokerpb";

@@ -2,7 +2,7 @@ package clientutil
 
 import (
 	mqtt "github.com/mochi-mqtt/server/v2"
-	"github.com/weflux/loop/contenttype"
+	"github.com/weflux/loopin/contenttype"
 )
 
 func GetContentType(cl *mqtt.Client) contenttype.ContentType {

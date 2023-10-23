@@ -1,4 +1,4 @@
-package loop
+package loopin
 
 import (
 	"context"
@@ -7,10 +7,11 @@ import (
 	"github.com/mochi-mqtt/server/v2/hooks/storage/redis"
 	"github.com/mochi-mqtt/server/v2/listeners"
 	"github.com/mochi-mqtt/server/v2/packets"
-	"github.com/weflux/loop/cluster/broker"
-	"github.com/weflux/loop/hook"
-	"github.com/weflux/loop/option"
-	"github.com/weflux/loop/proxy"
+	"github.com/weflux/loopin/broker"
+	"github.com/weflux/loopin/hook"
+	"github.com/weflux/loopin/hook/badgerv4"
+	"github.com/weflux/loopin/option"
+	"github.com/weflux/loopin/proxy"
 	"log"
 	"log/slog"
 )
@@ -22,8 +23,11 @@ type Node struct {
 	serverSideClient *ServerSideClient
 }
 
-func (h *Node) Start(_ context.Context) error {
+func (h *Node) Start(ctx context.Context) error {
 	h.logger.Info("node server starting")
+	if err := h.broker.Start(ctx); err != nil {
+		panic(err)
+	}
 	h.serverSideClient = newServerSideClient(h, h.broker, h.logger)
 	return h.Serve()
 }
@@ -76,15 +80,24 @@ func (h *Node) UnsubscribeClient(cl *mqtt.Client, filter string) error {
 }
 
 func NewNode(
-	conf option.Options,
+	broker broker.Broker,
+	opts option.Options,
 	slogger *slog.Logger,
+	hooks ...mqtt.Hook,
 ) *Node {
 	s := mqtt.New(&mqtt.Options{
 		InlineClient: true,
 		Logger:       slogger,
 	})
 
-	if c := conf.Redis; c != nil {
+	if opts.Store == nil || opts.Store.Badger != nil {
+		//bdopt := badger2.DefaultOptions(".badger")
+		//bdopt.Mem
+		if err := s.AddHook(new(badgerv4.Hook), nil); err != nil {
+			panic(err)
+		}
+	} else if opts.Store != nil && opts.Store.Redis != nil {
+		c := opts.Store.Redis
 		if err := s.AddHook(new(redis.Hook), &redis.Options{
 			HPrefix: c.Prefix,
 			Options: &rv8.Options{
@@ -97,37 +110,32 @@ func NewNode(
 		}
 	}
 
-	if conf.Hooks != nil && conf.Hooks.ACL != nil {
-		if err := s.AddHook(conf.Hooks.ACL, map[string]interface{}{}); err != nil {
+	for _, h := range hooks {
+		if err := s.AddHook(h, map[string]interface{}{}); err != nil {
 			log.Fatal("add mqtt server hook failed", err)
 		}
 	}
 
-	if conf.Hooks != nil && conf.Hooks.Authenticate != nil {
-		if err := s.AddHook(conf.Hooks.Authenticate, map[string]interface{}{}); err != nil {
+	var proxyMap *proxy.ProxyMap
+	if c := opts.Proxy; c != nil {
+		proxyMap = proxy.NewProxyMap(c)
+		proxyHook := hook.NewProxy(proxyMap, slogger)
+		if err := s.AddHook(proxyHook, map[string]interface{}{}); err != nil {
 			log.Fatal("add mqtt server hook failed", err)
 		}
 	}
 
-	if c := conf.Proxy; c != nil {
-		pm := proxy.NewProxyMap(c)
-		ph := hook.NewProxy(pm, slogger)
-		if err := s.AddHook(ph, map[string]interface{}{}); err != nil {
-			log.Fatal("add mqtt server hook failed", err)
-		}
-	}
-
-	var b = conf.Broker
+	var b = broker
 	if b == nil {
 		panic("Options.Broker must not be nil")
 	}
 
-	bh := hook.NewBroker(b, slogger)
-	if err := s.AddHook(bh, map[string]interface{}{}); err != nil {
+	brokerHook := hook.NewBroker(b, proxyMap, slogger)
+	if err := s.AddHook(brokerHook, map[string]interface{}{}); err != nil {
 		log.Fatal("add mqtt server hook failed", err)
 	}
 
-	c := conf.MQTT
+	c := opts.MQTT
 	if c == nil {
 		panic("config mqtt must not null")
 	}

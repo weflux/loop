@@ -6,18 +6,21 @@ import (
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/mochi-mqtt/server/v2/system"
-	"github.com/weflux/loop/cluster/broker"
+	"github.com/weflux/loopin/broker"
+	"github.com/weflux/loopin/proxy"
 	"log/slog"
 )
 
 func NewBroker(
 	broker broker.Broker,
+	proxyMap *proxy.ProxyMap,
 	logger *slog.Logger,
 ) *Broker {
 	b := &Broker{
 		HookBase: mqtt.HookBase{},
 		broker:   broker,
 		logger:   logger,
+		proxyMap: proxyMap,
 	}
 
 	b.ctx, b.cancelCtx = context.WithCancel(context.Background())
@@ -31,6 +34,7 @@ type Broker struct {
 	logger    *slog.Logger
 	ctx       context.Context
 	cancelCtx context.CancelFunc
+	proxyMap  *proxy.ProxyMap
 }
 
 // ID returns the ID of the hook.
@@ -122,7 +126,16 @@ func (h *Broker) OnUnsubscribed(cl *mqtt.Client, pk packets.Packet) {}
 
 // OnPublish is called when a client publishes a message.
 func (h *Broker) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, error) {
+	if pk.Ignore {
+		return pk, nil
+	}
+
 	if !cl.Net.Inline {
+		if h.proxyMap != nil {
+			if _, ok := h.proxyMap.RPCProxies[pk.TopicName]; ok {
+				return pk, nil
+			}
+		}
 		if err := h.broker.Publish(&broker.Publication{
 			TopicName: pk.TopicName,
 			Retain:    pk.FixedHeader.Retain,

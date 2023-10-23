@@ -2,15 +2,22 @@ package option
 
 import (
 	mqtt "github.com/mochi-mqtt/server/v2"
-	"github.com/weflux/loop/cluster/broker"
 )
 
 type Options struct {
+	Store *StoreOption `json:"store"`
+	MQTT  *MQTTOption  `json:"mqtt"`
+	Proxy *ProxyOption `json:"proxy"`
+	//Hooks  *HooksOption  `json:"-"`
+	//Broker broker.Broker `json:"-"`
+}
+
+type StoreOption struct {
 	Redis  *RedisOption  `json:"redis"`
-	MQTT   *MQTTOption   `json:"mqtt"`
-	Proxy  *ProxyOption  `json:"proxy"`
-	Hooks  *HooksOption  `json:"-"`
-	Broker broker.Broker `json:"-"`
+	Badger *BadgerOption `json:"badger"`
+}
+
+type BadgerOption struct {
 }
 
 type RedisOption struct {
@@ -26,7 +33,9 @@ type RouteOption struct {
 }
 
 type ProxyOption struct {
-	Authenticate *RouteOption            `json:"authenticate"`
+	Connect      *RouteOption            `json:"connect"`
+	Connected    *RouteOption            `json:"connected"`
+	Disconnected *RouteOption            `json:"disconnected"`
 	Subscribe    *RouteOption            `json:"subscribe"`
 	RPC          map[string]*RouteOption `json:"rpc"`
 }

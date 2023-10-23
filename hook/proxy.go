@@ -7,15 +7,14 @@ import (
 	"fmt"
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
-	"github.com/samber/lo"
-	"github.com/weflux/loop/errcodes"
-	"github.com/weflux/loop/protocol/envelope/v1"
-	proxypb "github.com/weflux/loop/protocol/proxy"
-	shared "github.com/weflux/loop/protocol/shared"
-	"github.com/weflux/loop/proxy"
-	"github.com/weflux/loop/utils/clientutil"
-	"github.com/weflux/loop/utils/packetutil"
-	"github.com/weflux/loop/utils/topicutil"
+	"github.com/weflux/loopin/errcodes"
+	"github.com/weflux/loopin/protocol/envelope/v1"
+	proxypb "github.com/weflux/loopin/protocol/proxy"
+	shared "github.com/weflux/loopin/protocol/shared"
+	"github.com/weflux/loopin/proxy"
+	"github.com/weflux/loopin/utils/clientutil"
+	"github.com/weflux/loopin/utils/packetutil"
+	"github.com/weflux/loopin/utils/topicutil"
 	"log/slog"
 )
 
@@ -118,12 +117,22 @@ func (h *Proxy) OnUnsubscribed(cl *mqtt.Client, pk packets.Packet) {
 }
 
 func (h *Proxy) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, error) {
+	defer func() {
+		if r := recover(); r != nil {
+			h.logger.Error("on publish error", "error", r)
+		}
+	}()
+
 	h.Log.Debug("on publish to channel", "client_id", cl.ID, "topic_name", pk.TopicName)
 
 	topic := pk.TopicName
 	if p, ok := h.proxyMap.RPCProxies[topic]; ok {
 		ct := clientutil.GetContentType(cl)
 		msg := &envelope.Message{}
+
+		var pack packets.Packet
+		var err error
+
 		if err := ct.Unmarshal(pk.Payload, msg); err != nil {
 			return packets.Packet{}, err
 		}
@@ -145,39 +154,30 @@ func (h *Proxy) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, e
 			PayloadText:  request.PayloadText,
 		}
 
-		var pack packets.Packet
-		err, ok := lo.TryWithErrorValue(func() error {
-			var err error
-			rep, err := p.ProxyRPC(context.Background(), req)
-			if err != nil {
-				h.logger.Error("rpc proxy error", err)
-				return err
-			}
-			rep.Id = req.Id
-			if rep.Metadata == nil {
-				rep.Metadata = req.Metadata
-			}
-			pack = replyPacket(cl, rep, req)
-			return nil
-		})
-		if !ok && err != nil {
+		rep, err := p.ProxyRPC(context.Background(), req)
+		if err != nil {
 			h.logger.Error("rpc proxy error ", err)
 			pack = errorPacket(cl, &proxypb.Error{
 				Code:    errcodes.RuntimeError,
 				Message: err.(error).Error(),
 			}, req)
+		} else {
+			rep.Id = req.Id
+			if rep.Metadata == nil {
+				rep.Metadata = req.Metadata
+			}
+			pack = replyPacket(cl, rep, req)
 		}
-
-		if cl.ID == "inline" {
+		if cl.Net.Inline {
 			pack.Ignore = false
 			return pack, nil
 		} else {
 			if err := cl.WritePacket(pack); err != nil {
-				return pack, err
+				return emptyPacket(), err
 			}
 		}
 
-		return pack, nil
+		return emptyPacket(), nil
 	}
 	return h.HookBase.OnPublish(cl, pk)
 }
@@ -192,10 +192,19 @@ func errorPacket(cl *mqtt.Client, errRep *proxypb.Error, req *proxypb.RPCRequest
 			Extras:  map[string]string{},
 		}
 	}
+	id := ""
+	if req != nil {
+		id = req.Id
+	}
+
+	command := ""
+	if req != nil {
+		command = req.Command
+	}
 	msg := &envelope.Message{
-		Id: req.Id,
+		Id: id,
 		Body: &envelope.Message_Reply{Reply: &envelope.Reply{
-			Command: req.Command,
+			Command: command,
 			Error:   e,
 		}},
 	}
@@ -210,6 +219,13 @@ func errorPacket(cl *mqtt.Client, errRep *proxypb.Error, req *proxypb.RPCRequest
 		Payload:     data,
 	}
 	return pk
+}
+
+func emptyPacket() packets.Packet {
+	return packets.Packet{
+		TopicName: "$RPC/reply",
+		Ignore:    true,
+	}
 }
 
 func replyPacket(cl *mqtt.Client, rep *proxypb.RPCReply, req *proxypb.RPCRequest) packets.Packet {
@@ -257,9 +273,9 @@ func (h *Proxy) OnPublished(cl *mqtt.Client, pk packets.Packet) {
 
 func (h *Proxy) OnConnectAuthenticate(cl *mqtt.Client, pk packets.Packet) bool {
 	h.Log.Debug(fmt.Sprintf("[id=%s] try connect authenticate: %s %s", cl.ID, string(pk.Connect.Username), string(pk.Connect.Password)))
-	if h.proxyMap.AuthenticateProxy != nil {
+	if h.proxyMap.ConnectProxy != nil {
 		req := packetutil.ToConnectRequest(cl, &pk)
-		rep, err := h.proxyMap.AuthenticateProxy.ProxyAuthenticate(emptyCtx(), req)
+		rep, err := h.proxyMap.ConnectProxy.ProxyConnect(emptyCtx(), req)
 		if err != nil {
 			h.Log.Error("authenticate failed", "error", err)
 			return false

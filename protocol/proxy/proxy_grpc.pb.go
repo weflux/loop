@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Proxy_Connect_FullMethodName    = "/loop.proxy.Proxy/Connect"
-	Proxy_Subscribe_FullMethodName  = "/loop.proxy.Proxy/Subscribe"
-	Proxy_RPC_FullMethodName        = "/loop.proxy.Proxy/RPC"
-	Proxy_Publish_FullMethodName    = "/loop.proxy.Proxy/Publish"
-	Proxy_Refresh_FullMethodName    = "/loop.proxy.Proxy/Refresh"
-	Proxy_SubRefresh_FullMethodName = "/loop.proxy.Proxy/SubRefresh"
+	Proxy_Connect_FullMethodName    = "/loopin.proxy.Proxy/Connect"
+	Proxy_Subscribe_FullMethodName  = "/loopin.proxy.Proxy/Subscribe"
+	Proxy_RPC_FullMethodName        = "/loopin.proxy.Proxy/RPC"
+	Proxy_Publish_FullMethodName    = "/loopin.proxy.Proxy/Publish"
+	Proxy_Refresh_FullMethodName    = "/loopin.proxy.Proxy/Refresh"
+	Proxy_SubRefresh_FullMethodName = "/loopin.proxy.Proxy/SubRefresh"
 )
 
 // ProxyClient is the client API for Proxy service.
@@ -261,7 +261,7 @@ func _Proxy_SubRefresh_Handler(srv interface{}, ctx context.Context, dec func(in
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Proxy_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "loop.proxy.Proxy",
+	ServiceName: "loopin.proxy.Proxy",
 	HandlerType: (*ProxyServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
