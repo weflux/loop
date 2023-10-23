@@ -8,6 +8,7 @@ import (
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/weflux/loopin/errcodes"
+	"github.com/weflux/loopin/protocol/envelope/v1"
 	proxypb "github.com/weflux/loopin/protocol/proxy"
 	shared "github.com/weflux/loopin/protocol/shared"
 	"github.com/weflux/loopin/proxy"
