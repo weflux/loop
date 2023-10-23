@@ -1,9 +1,9 @@
-package loop
+package loopin
 
 import (
 	"context"
 	"github.com/stretchr/testify/require"
-	"github.com/weflux/loop/option"
+	"github.com/weflux/loopin/option"
 	"log/slog"
 	"testing"
 )

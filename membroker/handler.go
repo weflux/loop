@@ -2,22 +2,22 @@ package membroker
 
 import (
 	"github.com/mochi-mqtt/server/v2/packets"
-	"github.com/weflux/loop"
-	"github.com/weflux/loop/broker"
-	"github.com/weflux/loop/broker/eventhandler"
+	"github.com/weflux/loopin"
+	"github.com/weflux/loopin/broker"
+	"github.com/weflux/loopin/broker/eventhandler"
 	"log/slog"
 )
 
 var _ eventhandler.EventHandler = new(MemHandler)
 
-func NewMemHandler(node *loop.Node, queue *Queue, slogger *slog.Logger) *MemHandler {
+func NewMemHandler(node *loopin.Node, queue *Queue, slogger *slog.Logger) *MemHandler {
 	h := &MemHandler{node: node, queue: queue, logger: slogger}
 	go h.eventLoop()
 	return h
 }
 
 type MemHandler struct {
-	node   *loop.Node
+	node   *loopin.Node
 	logger *slog.Logger
 	queue  *Queue
 }

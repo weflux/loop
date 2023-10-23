@@ -1,4 +1,4 @@
-module github.com/weflux/loop
+module github.com/weflux/loopin
 
 go 1.21
 

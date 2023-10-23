@@ -1,4 +1,4 @@
-package loop
+package loopin
 
 import (
 	"context"
@@ -6,11 +6,10 @@ import (
 	"github.com/google/uuid"
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
-	"github.com/weflux/loop/broker"
-	"github.com/weflux/loop/contenttype"
-	apiv1 "github.com/weflux/loop/protocol/api/v1"
-	"github.com/weflux/loop/protocol/envelope/v1"
-	"github.com/weflux/loop/utils/topicutil"
+	"github.com/weflux/loopin/broker"
+	"github.com/weflux/loopin/contenttype"
+	apiv1 "github.com/weflux/loopin/protocol/api/v1"
+	"github.com/weflux/loopin/utils/topicutil"
 	"log/slog"
 	"sync"
 	"time"

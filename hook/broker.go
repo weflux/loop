@@ -6,8 +6,8 @@ import (
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/mochi-mqtt/server/v2/system"
-	"github.com/weflux/loop/broker"
-	"github.com/weflux/loop/proxy"
+	"github.com/weflux/loopin/broker"
+	"github.com/weflux/loopin/proxy"
 	"log/slog"
 )
 

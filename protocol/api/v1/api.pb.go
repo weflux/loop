@@ -7,7 +7,7 @@
 package apiv1
 
 import (
-	shared "github.com/weflux/loop/protocol/shared"
+	shared "github.com/weflux/loopin/protocol/shared"
 	_ "google.golang.org/genproto/googleapis/api/annotations"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
@@ -956,39 +956,39 @@ func file_api_v1_api_proto_rawDescGZIP() []byte {
 
 var file_api_v1_api_proto_msgTypes = make([]protoimpl.MessageInfo, 12)
 var file_api_v1_api_proto_goTypes = []interface{}{
-	(*SurveyRequest)(nil),      // 0: loop.api.SurveyRequest
-	(*Error)(nil),              // 1: loop.api.Error
-	(*SurveyReply)(nil),        // 2: loop.api.SurveyReply
-	(*PublishRequest)(nil),     // 3: loop.api.PublishRequest
-	(*PublishReply)(nil),       // 4: loop.api.PublishReply
-	(*SubscribeRequest)(nil),   // 5: loop.api.SubscribeRequest
-	(*SubscribeReply)(nil),     // 6: loop.api.SubscribeReply
-	(*UnsubscribeRequest)(nil), // 7: loop.api.UnsubscribeRequest
-	(*UnsubscribeReply)(nil),   // 8: loop.api.UnsubscribeReply
-	(*DisconnectRequest)(nil),  // 9: loop.api.DisconnectRequest
-	(*DisconnectReply)(nil),    // 10: loop.api.DisconnectReply
-	(*SurveyReply_Result)(nil), // 11: loop.api.SurveyReply.Result
-	(*shared.Metadata)(nil),    // 12: loop.shared.Metadata
+	(*SurveyRequest)(nil),      // 0: loopin.api.SurveyRequest
+	(*Error)(nil),              // 1: loopin.api.Error
+	(*SurveyReply)(nil),        // 2: loopin.api.SurveyReply
+	(*PublishRequest)(nil),     // 3: loopin.api.PublishRequest
+	(*PublishReply)(nil),       // 4: loopin.api.PublishReply
+	(*SubscribeRequest)(nil),   // 5: loopin.api.SubscribeRequest
+	(*SubscribeReply)(nil),     // 6: loopin.api.SubscribeReply
+	(*UnsubscribeRequest)(nil), // 7: loopin.api.UnsubscribeRequest
+	(*UnsubscribeReply)(nil),   // 8: loopin.api.UnsubscribeReply
+	(*DisconnectRequest)(nil),  // 9: loopin.api.DisconnectRequest
+	(*DisconnectReply)(nil),    // 10: loopin.api.DisconnectReply
+	(*SurveyReply_Result)(nil), // 11: loopin.api.SurveyReply.Result
+	(*shared.Metadata)(nil),    // 12: loopin.shared.Metadata
 }
 var file_api_v1_api_proto_depIdxs = []int32{
-	1,  // 0: loop.api.SurveyReply.error:type_name -> loop.api.Error
-	11, // 1: loop.api.SurveyReply.results:type_name -> loop.api.SurveyReply.Result
-	1,  // 2: loop.api.PublishReply.error:type_name -> loop.api.Error
-	1,  // 3: loop.api.SubscribeReply.error:type_name -> loop.api.Error
-	1,  // 4: loop.api.UnsubscribeReply.error:type_name -> loop.api.Error
-	1,  // 5: loop.api.DisconnectReply.error:type_name -> loop.api.Error
-	1,  // 6: loop.api.SurveyReply.Result.error:type_name -> loop.api.Error
-	12, // 7: loop.api.SurveyReply.Result.metadata:type_name -> loop.shared.Metadata
-	3,  // 8: loop.api.Api.Publish:input_type -> loop.api.PublishRequest
-	0,  // 9: loop.api.Api.Survey:input_type -> loop.api.SurveyRequest
-	5,  // 10: loop.api.Api.Subscribe:input_type -> loop.api.SubscribeRequest
-	7,  // 11: loop.api.Api.Unsubscribe:input_type -> loop.api.UnsubscribeRequest
-	9,  // 12: loop.api.Api.Disconnect:input_type -> loop.api.DisconnectRequest
-	4,  // 13: loop.api.Api.Publish:output_type -> loop.api.PublishReply
-	2,  // 14: loop.api.Api.Survey:output_type -> loop.api.SurveyReply
-	6,  // 15: loop.api.Api.Subscribe:output_type -> loop.api.SubscribeReply
-	8,  // 16: loop.api.Api.Unsubscribe:output_type -> loop.api.UnsubscribeReply
-	10, // 17: loop.api.Api.Disconnect:output_type -> loop.api.DisconnectReply
+	1,  // 0: loopin.api.SurveyReply.error:type_name -> loopin.api.Error
+	11, // 1: loopin.api.SurveyReply.results:type_name -> loopin.api.SurveyReply.Result
+	1,  // 2: loopin.api.PublishReply.error:type_name -> loopin.api.Error
+	1,  // 3: loopin.api.SubscribeReply.error:type_name -> loopin.api.Error
+	1,  // 4: loopin.api.UnsubscribeReply.error:type_name -> loopin.api.Error
+	1,  // 5: loopin.api.DisconnectReply.error:type_name -> loopin.api.Error
+	1,  // 6: loopin.api.SurveyReply.Result.error:type_name -> loopin.api.Error
+	12, // 7: loopin.api.SurveyReply.Result.metadata:type_name -> loopin.shared.Metadata
+	3,  // 8: loopin.api.Api.Publish:input_type -> loopin.api.PublishRequest
+	0,  // 9: loopin.api.Api.Survey:input_type -> loopin.api.SurveyRequest
+	5,  // 10: loopin.api.Api.Subscribe:input_type -> loopin.api.SubscribeRequest
+	7,  // 11: loopin.api.Api.Unsubscribe:input_type -> loopin.api.UnsubscribeRequest
+	9,  // 12: loopin.api.Api.Disconnect:input_type -> loopin.api.DisconnectRequest
+	4,  // 13: loopin.api.Api.Publish:output_type -> loopin.api.PublishReply
+	2,  // 14: loopin.api.Api.Survey:output_type -> loopin.api.SurveyReply
+	6,  // 15: loopin.api.Api.Subscribe:output_type -> loopin.api.SubscribeReply
+	8,  // 16: loopin.api.Api.Unsubscribe:output_type -> loopin.api.UnsubscribeReply
+	10, // 17: loopin.api.Api.Disconnect:output_type -> loopin.api.DisconnectReply
 	13, // [13:18] is the sub-list for method output_type
 	8,  // [8:13] is the sub-list for method input_type
 	8,  // [8:8] is the sub-list for extension type_name

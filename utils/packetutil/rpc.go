@@ -4,10 +4,10 @@ import (
 	"github.com/google/uuid"
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
-	proxypb "github.com/weflux/loop/protocol/proxy"
-	shared "github.com/weflux/loop/protocol/shared"
-	"github.com/weflux/loop/utils/clientutil"
-	"github.com/weflux/loop/utils/topicutil"
+	proxypb "github.com/weflux/loopin/protocol/proxy"
+	shared "github.com/weflux/loopin/protocol/shared"
+	"github.com/weflux/loopin/utils/clientutil"
+	"github.com/weflux/loopin/utils/topicutil"
 )
 
 func ToConnectRequest(cl *mqtt.Client, pk *packets.Packet) *proxypb.ConnectRequest {

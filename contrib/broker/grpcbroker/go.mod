@@ -1,14 +1,14 @@
-module github.com/weflux/loop/contrib/broker/grpc
+module github.com/weflux/loopin/contrib/broker/grpc
 
 go 1.21
 
-replace github.com/weflux/loop => ../../../
+replace github.com/weflux/loopin => ../../../
 
 require (
 	github.com/google/uuid v1.3.1
 	github.com/mochi-mqtt/server/v2 v2.4.0
 	github.com/weflux/fast-topic-matching v0.0.0-20230918111155-9fc8f7dbe829
-	github.com/weflux/loop v0.1.0
+	github.com/weflux/loopin v0.1.0
 	go.uber.org/multierr v1.11.0
 	google.golang.org/grpc v1.58.2
 )

@@ -7,7 +7,7 @@
 package brokerpb
 
 import (
-	shared "github.com/weflux/loop/protocol/shared"
+	shared "github.com/weflux/loopin/protocol/shared"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -711,32 +711,32 @@ func file_broker_broker_proto_rawDescGZIP() []byte {
 
 var file_broker_broker_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_broker_broker_proto_goTypes = []interface{}{
-	(*ClientInfo)(nil),         // 0: loop.broker.ClientInfo
-	(*Command)(nil),            // 1: loop.broker.Command
-	(*PublishRequest)(nil),     // 2: loop.broker.PublishRequest
-	(*PublishReply)(nil),       // 3: loop.broker.PublishReply
-	(*SubscribeRequest)(nil),   // 4: loop.broker.SubscribeRequest
-	(*SubscribeReply)(nil),     // 5: loop.broker.SubscribeReply
-	(*UnsubscribeRequest)(nil), // 6: loop.broker.UnsubscribeRequest
-	(*UnsubscribeReply)(nil),   // 7: loop.broker.UnsubscribeReply
-	(*DisconnectRequest)(nil),  // 8: loop.broker.DisconnectRequest
-	(*DisconnectReply)(nil),    // 9: loop.broker.DisconnectReply
-	(*shared.Metadata)(nil),    // 10: loop.shared.Metadata
+	(*ClientInfo)(nil),         // 0: loopin.broker.ClientInfo
+	(*Command)(nil),            // 1: loopin.broker.Command
+	(*PublishRequest)(nil),     // 2: loopin.broker.PublishRequest
+	(*PublishReply)(nil),       // 3: loopin.broker.PublishReply
+	(*SubscribeRequest)(nil),   // 4: loopin.broker.SubscribeRequest
+	(*SubscribeReply)(nil),     // 5: loopin.broker.SubscribeReply
+	(*UnsubscribeRequest)(nil), // 6: loopin.broker.UnsubscribeRequest
+	(*UnsubscribeReply)(nil),   // 7: loopin.broker.UnsubscribeReply
+	(*DisconnectRequest)(nil),  // 8: loopin.broker.DisconnectRequest
+	(*DisconnectReply)(nil),    // 9: loopin.broker.DisconnectReply
+	(*shared.Metadata)(nil),    // 10: loopin.shared.Metadata
 }
 var file_broker_broker_proto_depIdxs = []int32{
-	10, // 0: loop.broker.PublishRequest.metadata:type_name -> loop.shared.Metadata
-	2,  // 1: loop.broker.Broker.Publish:input_type -> loop.broker.PublishRequest
-	4,  // 2: loop.broker.Broker.Subscribe:input_type -> loop.broker.SubscribeRequest
-	4,  // 3: loop.broker.Broker.SubscribeClient:input_type -> loop.broker.SubscribeRequest
-	6,  // 4: loop.broker.Broker.Unsubscribe:input_type -> loop.broker.UnsubscribeRequest
-	6,  // 5: loop.broker.Broker.UnsubscribeClient:input_type -> loop.broker.UnsubscribeRequest
-	8,  // 6: loop.broker.Broker.DisconnectClient:input_type -> loop.broker.DisconnectRequest
-	3,  // 7: loop.broker.Broker.Publish:output_type -> loop.broker.PublishReply
-	5,  // 8: loop.broker.Broker.Subscribe:output_type -> loop.broker.SubscribeReply
-	5,  // 9: loop.broker.Broker.SubscribeClient:output_type -> loop.broker.SubscribeReply
-	7,  // 10: loop.broker.Broker.Unsubscribe:output_type -> loop.broker.UnsubscribeReply
-	7,  // 11: loop.broker.Broker.UnsubscribeClient:output_type -> loop.broker.UnsubscribeReply
-	9,  // 12: loop.broker.Broker.DisconnectClient:output_type -> loop.broker.DisconnectReply
+	10, // 0: loopin.broker.PublishRequest.metadata:type_name -> loopin.shared.Metadata
+	2,  // 1: loopin.broker.Broker.Publish:input_type -> loopin.broker.PublishRequest
+	4,  // 2: loopin.broker.Broker.Subscribe:input_type -> loopin.broker.SubscribeRequest
+	4,  // 3: loopin.broker.Broker.SubscribeClient:input_type -> loopin.broker.SubscribeRequest
+	6,  // 4: loopin.broker.Broker.Unsubscribe:input_type -> loopin.broker.UnsubscribeRequest
+	6,  // 5: loopin.broker.Broker.UnsubscribeClient:input_type -> loopin.broker.UnsubscribeRequest
+	8,  // 6: loopin.broker.Broker.DisconnectClient:input_type -> loopin.broker.DisconnectRequest
+	3,  // 7: loopin.broker.Broker.Publish:output_type -> loopin.broker.PublishReply
+	5,  // 8: loopin.broker.Broker.Subscribe:output_type -> loopin.broker.SubscribeReply
+	5,  // 9: loopin.broker.Broker.SubscribeClient:output_type -> loopin.broker.SubscribeReply
+	7,  // 10: loopin.broker.Broker.Unsubscribe:output_type -> loopin.broker.UnsubscribeReply
+	7,  // 11: loopin.broker.Broker.UnsubscribeClient:output_type -> loopin.broker.UnsubscribeReply
+	9,  // 12: loopin.broker.Broker.DisconnectClient:output_type -> loopin.broker.DisconnectReply
 	7,  // [7:13] is the sub-list for method output_type
 	1,  // [1:7] is the sub-list for method input_type
 	1,  // [1:1] is the sub-list for extension type_name

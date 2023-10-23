@@ -7,7 +7,7 @@
 package proxypb
 
 import (
-	shared "github.com/weflux/loop/protocol/shared"
+	shared "github.com/weflux/loopin/protocol/shared"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -907,43 +907,43 @@ func file_proxy_proxy_proto_rawDescGZIP() []byte {
 
 var file_proxy_proxy_proto_msgTypes = make([]protoimpl.MessageInfo, 15)
 var file_proxy_proxy_proto_goTypes = []interface{}{
-	(*Error)(nil),                  // 0: loop.proxy.Error
-	(*Disconnect)(nil),             // 1: loop.proxy.Disconnect
-	(*ConnectRequest)(nil),         // 2: loop.proxy.ConnectRequest
-	(*ConnectReply)(nil),           // 3: loop.proxy.ConnectReply
-	(*SubscribeRequest)(nil),       // 4: loop.proxy.SubscribeRequest
-	(*SubscribeReply)(nil),         // 5: loop.proxy.SubscribeReply
-	(*RPCRequest)(nil),             // 6: loop.proxy.RPCRequest
-	(*RPCReply)(nil),               // 7: loop.proxy.RPCReply
-	(*PublishRequest)(nil),         // 8: loop.proxy.PublishRequest
-	(*PublishReply)(nil),           // 9: loop.proxy.PublishReply
-	(*RefreshRequest)(nil),         // 10: loop.proxy.RefreshRequest
-	(*RefreshReply)(nil),           // 11: loop.proxy.RefreshReply
-	(*SubRefreshRequest)(nil),      // 12: loop.proxy.SubRefreshRequest
-	(*SubRefreshReply)(nil),        // 13: loop.proxy.SubRefreshReply
-	(*ConnectRequest_Payload)(nil), // 14: loop.proxy.ConnectRequest.Payload
-	(*shared.Metadata)(nil),        // 15: loop.shared.Metadata
+	(*Error)(nil),                  // 0: loopin.proxy.Error
+	(*Disconnect)(nil),             // 1: loopin.proxy.Disconnect
+	(*ConnectRequest)(nil),         // 2: loopin.proxy.ConnectRequest
+	(*ConnectReply)(nil),           // 3: loopin.proxy.ConnectReply
+	(*SubscribeRequest)(nil),       // 4: loopin.proxy.SubscribeRequest
+	(*SubscribeReply)(nil),         // 5: loopin.proxy.SubscribeReply
+	(*RPCRequest)(nil),             // 6: loopin.proxy.RPCRequest
+	(*RPCReply)(nil),               // 7: loopin.proxy.RPCReply
+	(*PublishRequest)(nil),         // 8: loopin.proxy.PublishRequest
+	(*PublishReply)(nil),           // 9: loopin.proxy.PublishReply
+	(*RefreshRequest)(nil),         // 10: loopin.proxy.RefreshRequest
+	(*RefreshReply)(nil),           // 11: loopin.proxy.RefreshReply
+	(*SubRefreshRequest)(nil),      // 12: loopin.proxy.SubRefreshRequest
+	(*SubRefreshReply)(nil),        // 13: loopin.proxy.SubRefreshReply
+	(*ConnectRequest_Payload)(nil), // 14: loopin.proxy.ConnectRequest.Payload
+	(*shared.Metadata)(nil),        // 15: loopin.shared.Metadata
 }
 var file_proxy_proxy_proto_depIdxs = []int32{
-	1,  // 0: loop.proxy.Error.disconnect:type_name -> loop.proxy.Disconnect
-	15, // 1: loop.proxy.ConnectRequest.metadata:type_name -> loop.shared.Metadata
-	14, // 2: loop.proxy.ConnectRequest.payload:type_name -> loop.proxy.ConnectRequest.Payload
-	0,  // 3: loop.proxy.ConnectReply.error:type_name -> loop.proxy.Error
-	15, // 4: loop.proxy.RPCRequest.metadata:type_name -> loop.shared.Metadata
-	0,  // 5: loop.proxy.RPCReply.error:type_name -> loop.proxy.Error
-	15, // 6: loop.proxy.RPCReply.metadata:type_name -> loop.shared.Metadata
-	2,  // 7: loop.proxy.Proxy.Connect:input_type -> loop.proxy.ConnectRequest
-	4,  // 8: loop.proxy.Proxy.Subscribe:input_type -> loop.proxy.SubscribeRequest
-	6,  // 9: loop.proxy.Proxy.RPC:input_type -> loop.proxy.RPCRequest
-	8,  // 10: loop.proxy.Proxy.Publish:input_type -> loop.proxy.PublishRequest
-	10, // 11: loop.proxy.Proxy.Refresh:input_type -> loop.proxy.RefreshRequest
-	4,  // 12: loop.proxy.Proxy.SubRefresh:input_type -> loop.proxy.SubscribeRequest
-	3,  // 13: loop.proxy.Proxy.Connect:output_type -> loop.proxy.ConnectReply
-	5,  // 14: loop.proxy.Proxy.Subscribe:output_type -> loop.proxy.SubscribeReply
-	7,  // 15: loop.proxy.Proxy.RPC:output_type -> loop.proxy.RPCReply
-	9,  // 16: loop.proxy.Proxy.Publish:output_type -> loop.proxy.PublishReply
-	11, // 17: loop.proxy.Proxy.Refresh:output_type -> loop.proxy.RefreshReply
-	13, // 18: loop.proxy.Proxy.SubRefresh:output_type -> loop.proxy.SubRefreshReply
+	1,  // 0: loopin.proxy.Error.disconnect:type_name -> loopin.proxy.Disconnect
+	15, // 1: loopin.proxy.ConnectRequest.metadata:type_name -> loopin.shared.Metadata
+	14, // 2: loopin.proxy.ConnectRequest.payload:type_name -> loopin.proxy.ConnectRequest.Payload
+	0,  // 3: loopin.proxy.ConnectReply.error:type_name -> loopin.proxy.Error
+	15, // 4: loopin.proxy.RPCRequest.metadata:type_name -> loopin.shared.Metadata
+	0,  // 5: loopin.proxy.RPCReply.error:type_name -> loopin.proxy.Error
+	15, // 6: loopin.proxy.RPCReply.metadata:type_name -> loopin.shared.Metadata
+	2,  // 7: loopin.proxy.Proxy.Connect:input_type -> loopin.proxy.ConnectRequest
+	4,  // 8: loopin.proxy.Proxy.Subscribe:input_type -> loopin.proxy.SubscribeRequest
+	6,  // 9: loopin.proxy.Proxy.RPC:input_type -> loopin.proxy.RPCRequest
+	8,  // 10: loopin.proxy.Proxy.Publish:input_type -> loopin.proxy.PublishRequest
+	10, // 11: loopin.proxy.Proxy.Refresh:input_type -> loopin.proxy.RefreshRequest
+	4,  // 12: loopin.proxy.Proxy.SubRefresh:input_type -> loopin.proxy.SubscribeRequest
+	3,  // 13: loopin.proxy.Proxy.Connect:output_type -> loopin.proxy.ConnectReply
+	5,  // 14: loopin.proxy.Proxy.Subscribe:output_type -> loopin.proxy.SubscribeReply
+	7,  // 15: loopin.proxy.Proxy.RPC:output_type -> loopin.proxy.RPCReply
+	9,  // 16: loopin.proxy.Proxy.Publish:output_type -> loopin.proxy.PublishReply
+	11, // 17: loopin.proxy.Proxy.Refresh:output_type -> loopin.proxy.RefreshReply
+	13, // 18: loopin.proxy.Proxy.SubRefresh:output_type -> loopin.proxy.SubRefreshReply
 	13, // [13:19] is the sub-list for method output_type
 	7,  // [7:13] is the sub-list for method input_type
 	7,  // [7:7] is the sub-list for extension type_name

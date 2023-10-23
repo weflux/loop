@@ -1,7 +1,7 @@
 package proxy
 
 import (
-	"github.com/weflux/loop/option"
+	"github.com/weflux/loopin/option"
 )
 
 //goland:noinspection GoNameStartsWithPackageName

@@ -1,4 +1,4 @@
-package loop
+package loopin
 
 import (
 	"context"
@@ -7,11 +7,11 @@ import (
 	"github.com/mochi-mqtt/server/v2/hooks/storage/redis"
 	"github.com/mochi-mqtt/server/v2/listeners"
 	"github.com/mochi-mqtt/server/v2/packets"
-	"github.com/weflux/loop/broker"
-	"github.com/weflux/loop/hook"
-	"github.com/weflux/loop/hook/badgerv4"
-	"github.com/weflux/loop/option"
-	"github.com/weflux/loop/proxy"
+	"github.com/weflux/loopin/broker"
+	"github.com/weflux/loopin/hook"
+	"github.com/weflux/loopin/hook/badgerv4"
+	"github.com/weflux/loopin/option"
+	"github.com/weflux/loopin/proxy"
 	"log"
 	"log/slog"
 )

@@ -2,9 +2,9 @@ package grpcbroker
 
 import (
 	"context"
-	"github.com/weflux/loop/broker"
-	"github.com/weflux/loop/broker/eventhandler"
-	brokerpb "github.com/weflux/loop/protocol/broker"
+	"github.com/weflux/loopin/broker"
+	"github.com/weflux/loopin/broker/eventhandler"
+	brokerpb "github.com/weflux/loopin/protocol/broker"
 )
 
 func NewBrokerService(handler eventhandler.EventHandler) *BrokerService {

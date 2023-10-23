@@ -2,7 +2,7 @@ package proxy
 
 import (
 	"context"
-	proxypb "github.com/weflux/loop/protocol/proxy"
+	proxypb "github.com/weflux/loopin/protocol/proxy"
 )
 
 type SubscribeProxy interface {

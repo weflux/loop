@@ -2,7 +2,7 @@ package membroker
 
 import (
 	"context"
-	"github.com/weflux/loop/broker"
+	"github.com/weflux/loopin/broker"
 	"log/slog"
 )
 
