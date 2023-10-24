@@ -9,7 +9,7 @@ import (
 	"github.com/weflux/loopify/broker"
 	"github.com/weflux/loopify/contenttype"
 	apiv1 "github.com/weflux/loopify/protocol/api/v1"
-	"github.com/weflux/loopify/protocol/envelope/v1"
+	envelopev1 "github.com/weflux/loopify/protocol/envelope/v1"
 	"github.com/weflux/loopify/utils/topicutil"
 	"log/slog"
 	"sync"
@@ -18,7 +18,7 @@ import (
 
 type ServerSideClient struct {
 	node         *Node
-	replyAwaiter map[string]chan *envelope.Reply
+	replyAwaiter map[string]chan *envelopev1.Reply
 	mu           sync.Mutex
 	broker       broker.Broker
 	logger       *slog.Logger
@@ -27,7 +27,7 @@ type ServerSideClient struct {
 func newServerSideClient(node *Node, broker broker.Broker, logger *slog.Logger) *ServerSideClient {
 
 	ssc := &ServerSideClient{
-		replyAwaiter: map[string]chan *envelope.Reply{},
+		replyAwaiter: map[string]chan *envelopev1.Reply{},
 		mu:           sync.Mutex{},
 		logger:       logger,
 		broker:       broker,
@@ -50,7 +50,7 @@ func (c *ServerSideClient) Start(ctx context.Context) error {
 	}
 	if err := c.node.Subscribe(topicutil.ReplyTopic(), 1, func(cl *mqtt.Client, sub packets.Subscription, pk packets.Packet) {
 		c.logger.Debug("received reply message", "topic", pk.TopicName)
-		msg := &envelope.Message{}
+		msg := &envelopev1.Message{}
 		if err := contenttype.JSON.Unmarshal(pk.Payload, msg); err != nil {
 			c.logger.Error("unmarshal message error ", err)
 			return
@@ -89,11 +89,11 @@ func timeoutCtx(ctx context.Context, d time.Duration) (context.Context, context.
 // Survey Survey 调用
 func (c *ServerSideClient) Survey(ctx context.Context, req *apiv1.SurveyRequest) (*apiv1.SurveyReply, error) {
 	id := uuid.NewString()
-	bs, err := contenttype.JSON.Marshal(&envelope.Message{
+	bs, err := contenttype.JSON.Marshal(&envelopev1.Message{
 		Id:      id,
 		Headers: make(map[string]string),
-		Body: &envelope.Message_Request{
-			Request: &envelope.Request{
+		Body: &envelopev1.Message_Request{
+			Request: &envelopev1.Request{
 				Command:      req.Command,
 				ContentType:  req.ContentType,
 				PayloadBytes: req.PayloadBytes,
@@ -114,7 +114,7 @@ func (c *ServerSideClient) Survey(ctx context.Context, req *apiv1.SurveyRequest)
 	defer cancelCtx()
 	// 将 pub/sub 模式转化为 request/reply 模式
 	c.mu.Lock()
-	replyCh := make(chan *envelope.Reply, req.ExpectReplies)
+	replyCh := make(chan *envelopev1.Reply, req.ExpectReplies)
 	c.replyAwaiter[id] = replyCh
 	c.mu.Unlock()
 	if err := c.node.Server.Publish(req.Topic, bs, false, 0); err != nil {
@@ -175,12 +175,11 @@ func (c *ServerSideClient) Publish(ctx context.Context, pub *apiv1.PublishReques
 		return nil, errors.New("api client not initialized")
 	}
 
-	//encoder := getEncoder(pub.ContentType)
-	msg := &envelope.Message{
+	msg := &envelopev1.Message{
 		Id:      uuid.NewString(),
 		Headers: map[string]string{},
-		Body: &envelope.Message_Publication{
-			Publication: &envelope.Publication{
+		Body: &envelopev1.Message_Publication{
+			Publication: &envelopev1.Publication{
 				Type:         pub.Type,
 				ContentType:  pub.ContentType,
 				PayloadText:  pub.PayloadText,

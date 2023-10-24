@@ -5,7 +5,7 @@ package loopify.api;
 import "shared/shared.proto";
 import "google/api/annotations.proto";
 
-option go_package = "protocol/api/v1;apiv1";
+option go_package = "github.com/weflux/loopify/protocolapi/v1;apiv1";
 
 service Api {
   rpc Publish(PublishRequest) returns (PublishReply) {

@@ -4,7 +4,7 @@ package loopify.envelope;
 
 import "shared/shared.proto";
 
-option go_package = "protocol/envelope/v1;envelope";
+option go_package = "github.com/weflux/loopify/protocolenvelope/v1;envelopev1";
 
 message Message {
   string id = 1 [json_name = "id"];

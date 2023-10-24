@@ -8,9 +8,9 @@ import (
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/weflux/loopify/errcodes"
-	"github.com/weflux/loopify/protocol/envelope/v1"
+	envelopev1 "github.com/weflux/loopify/protocol/envelope/v1"
 	proxypb "github.com/weflux/loopify/protocol/proxy"
-	shared "github.com/weflux/loopify/protocol/shared"
+	sharedpb "github.com/weflux/loopify/protocol/shared"
 	"github.com/weflux/loopify/proxy"
 	"github.com/weflux/loopify/utils/clientutil"
 	"github.com/weflux/loopify/utils/packetutil"
@@ -128,7 +128,7 @@ func (h *Proxy) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, e
 	topic := pk.TopicName
 	if p, ok := h.proxyMap.RPCProxies[topic]; ok {
 		ct := clientutil.GetContentType(cl)
-		msg := &envelope.Message{}
+		msg := &envelopev1.Message{}
 
 		var pack packets.Packet
 		var err error
@@ -144,7 +144,7 @@ func (h *Proxy) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, e
 
 		req := &proxypb.RPCRequest{
 			Id: msg.Id,
-			Metadata: &shared.Metadata{
+			Metadata: &sharedpb.Metadata{
 				Client: cl.ID,
 				User:   string(cl.Properties.Username),
 			},
@@ -184,9 +184,9 @@ func (h *Proxy) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, e
 
 func errorPacket(cl *mqtt.Client, errRep *proxypb.Error, req *proxypb.RPCRequest) packets.Packet {
 	ct := clientutil.GetContentType(cl)
-	var e *envelope.Error
+	var e *envelopev1.Error
 	if errRep != nil {
-		e = &envelope.Error{
+		e = &envelopev1.Error{
 			Code:    errRep.Code,
 			Message: errRep.Message,
 			Extras:  map[string]string{},
@@ -201,9 +201,9 @@ func errorPacket(cl *mqtt.Client, errRep *proxypb.Error, req *proxypb.RPCRequest
 	if req != nil {
 		command = req.Command
 	}
-	msg := &envelope.Message{
+	msg := &envelopev1.Message{
 		Id: id,
-		Body: &envelope.Message_Reply{Reply: &envelope.Reply{
+		Body: &envelopev1.Message_Reply{Reply: &envelopev1.Reply{
 			Command: command,
 			Error:   e,
 		}},
@@ -231,19 +231,19 @@ func emptyPacket() packets.Packet {
 func replyPacket(cl *mqtt.Client, rep *proxypb.RPCReply, req *proxypb.RPCRequest) packets.Packet {
 
 	ct := clientutil.GetContentType(cl)
-	var e *envelope.Error
+	var e *envelopev1.Error
 	if rep.Error != nil {
-		e = &envelope.Error{
+		e = &envelopev1.Error{
 			Code:    rep.Error.Code,
 			Message: rep.Error.Message,
 			Extras:  map[string]string{},
 		}
 	}
-	msg := &envelope.Message{
+	msg := &envelopev1.Message{
 		Id:      rep.Id,
 		Headers: map[string]string{},
-		Body: &envelope.Message_Reply{
-			Reply: &envelope.Reply{
+		Body: &envelopev1.Message_Reply{
+			Reply: &envelopev1.Reply{
 				Error:        e,
 				Command:      req.Command,
 				ContentType:  rep.ContentType,

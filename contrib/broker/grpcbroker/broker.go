@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/weflux/loopify/broker"
 	brokerpb "github.com/weflux/loopify/protocol/broker"
-	shared "github.com/weflux/loopify/protocol/shared"
+	sharedpb "github.com/weflux/loopify/protocol/shared"
 	"github.com/weflux/loopify/registry"
 	"go.uber.org/multierr"
 	"google.golang.org/grpc"
@@ -314,7 +314,7 @@ func (b *GrpcBroker) Publish(pub *broker.Publication) error {
 			Topic:  pub.TopicName,
 			Retain: pub.Retain,
 			Qos:    int32(pub.Qos),
-			Metadata: &shared.Metadata{
+			Metadata: &sharedpb.Metadata{
 				Topic:   pub.TopicName,
 				User:    "",
 				Session: "",

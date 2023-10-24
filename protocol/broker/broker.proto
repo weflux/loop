@@ -3,7 +3,7 @@ syntax = "proto3";
 package loopify.broker;
 
 
-option go_package = "protocol/broker;brokerpb";
+option go_package = "github.com/weflux/loopify/protocolbroker;brokerpb";
 
 import "shared/shared.proto";
 
