@@ -1,6 +1,6 @@
 package membroker
 
-import "github.com/weflux/loopin/broker"
+import "github.com/weflux/loopify/broker"
 
 type Queue struct {
 	Publish           chan *broker.Publication

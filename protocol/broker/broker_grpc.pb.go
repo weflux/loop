@@ -19,12 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Broker_Publish_FullMethodName           = "/loopin.broker.Broker/Publish"
-	Broker_Subscribe_FullMethodName         = "/loopin.broker.Broker/Subscribe"
-	Broker_SubscribeClient_FullMethodName   = "/loopin.broker.Broker/SubscribeClient"
-	Broker_Unsubscribe_FullMethodName       = "/loopin.broker.Broker/Unsubscribe"
-	Broker_UnsubscribeClient_FullMethodName = "/loopin.broker.Broker/UnsubscribeClient"
-	Broker_DisconnectClient_FullMethodName  = "/loopin.broker.Broker/DisconnectClient"
+	Broker_Publish_FullMethodName           = "/loopify.broker.Broker/Publish"
+	Broker_Subscribe_FullMethodName         = "/loopify.broker.Broker/Subscribe"
+	Broker_SubscribeClient_FullMethodName   = "/loopify.broker.Broker/SubscribeClient"
+	Broker_Unsubscribe_FullMethodName       = "/loopify.broker.Broker/Unsubscribe"
+	Broker_UnsubscribeClient_FullMethodName = "/loopify.broker.Broker/UnsubscribeClient"
+	Broker_DisconnectClient_FullMethodName  = "/loopify.broker.Broker/DisconnectClient"
 )
 
 // BrokerClient is the client API for Broker service.
@@ -261,7 +261,7 @@ func _Broker_DisconnectClient_Handler(srv interface{}, ctx context.Context, dec 
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Broker_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "loopin.broker.Broker",
+	ServiceName: "loopify.broker.Broker",
 	HandlerType: (*BrokerServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{

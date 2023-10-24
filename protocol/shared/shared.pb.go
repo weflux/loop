@@ -204,12 +204,12 @@ func file_shared_shared_proto_rawDescGZIP() []byte {
 var file_shared_shared_proto_enumTypes = make([]protoimpl.EnumInfo, 1)
 var file_shared_shared_proto_msgTypes = make([]protoimpl.MessageInfo, 2)
 var file_shared_shared_proto_goTypes = []interface{}{
-	(ContentType)(0), // 0: loopin.shared.ContentType
-	(*Metadata)(nil), // 1: loopin.shared.Metadata
-	nil,              // 2: loopin.shared.Metadata.TagsEntry
+	(ContentType)(0), // 0: loopify.shared.ContentType
+	(*Metadata)(nil), // 1: loopify.shared.Metadata
+	nil,              // 2: loopify.shared.Metadata.TagsEntry
 }
 var file_shared_shared_proto_depIdxs = []int32{
-	2, // 0: loopin.shared.Metadata.tags:type_name -> loopin.shared.Metadata.TagsEntry
+	2, // 0: loopify.shared.Metadata.tags:type_name -> loopify.shared.Metadata.TagsEntry
 	1, // [1:1] is the sub-list for method output_type
 	1, // [1:1] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

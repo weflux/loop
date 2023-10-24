@@ -7,7 +7,7 @@
 package brokerpb
 
 import (
-	shared "github.com/weflux/loopin/protocol/shared"
+	shared "github.com/weflux/loopify/protocol/shared"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -712,32 +712,32 @@ func file_broker_broker_proto_rawDescGZIP() []byte {
 
 var file_broker_broker_proto_msgTypes = make([]protoimpl.MessageInfo, 10)
 var file_broker_broker_proto_goTypes = []interface{}{
-	(*ClientInfo)(nil),         // 0: loopin.broker.ClientInfo
-	(*Command)(nil),            // 1: loopin.broker.Command
-	(*PublishRequest)(nil),     // 2: loopin.broker.PublishRequest
-	(*PublishReply)(nil),       // 3: loopin.broker.PublishReply
-	(*SubscribeRequest)(nil),   // 4: loopin.broker.SubscribeRequest
-	(*SubscribeReply)(nil),     // 5: loopin.broker.SubscribeReply
-	(*UnsubscribeRequest)(nil), // 6: loopin.broker.UnsubscribeRequest
-	(*UnsubscribeReply)(nil),   // 7: loopin.broker.UnsubscribeReply
-	(*DisconnectRequest)(nil),  // 8: loopin.broker.DisconnectRequest
-	(*DisconnectReply)(nil),    // 9: loopin.broker.DisconnectReply
-	(*shared.Metadata)(nil),    // 10: loopin.shared.Metadata
+	(*ClientInfo)(nil),         // 0: loopify.broker.ClientInfo
+	(*Command)(nil),            // 1: loopify.broker.Command
+	(*PublishRequest)(nil),     // 2: loopify.broker.PublishRequest
+	(*PublishReply)(nil),       // 3: loopify.broker.PublishReply
+	(*SubscribeRequest)(nil),   // 4: loopify.broker.SubscribeRequest
+	(*SubscribeReply)(nil),     // 5: loopify.broker.SubscribeReply
+	(*UnsubscribeRequest)(nil), // 6: loopify.broker.UnsubscribeRequest
+	(*UnsubscribeReply)(nil),   // 7: loopify.broker.UnsubscribeReply
+	(*DisconnectRequest)(nil),  // 8: loopify.broker.DisconnectRequest
+	(*DisconnectReply)(nil),    // 9: loopify.broker.DisconnectReply
+	(*shared.Metadata)(nil),    // 10: loopify.shared.Metadata
 }
 var file_broker_broker_proto_depIdxs = []int32{
-	10, // 0: loopin.broker.PublishRequest.metadata:type_name -> loopin.shared.Metadata
-	2,  // 1: loopin.broker.Broker.Publish:input_type -> loopin.broker.PublishRequest
-	4,  // 2: loopin.broker.Broker.Subscribe:input_type -> loopin.broker.SubscribeRequest
-	4,  // 3: loopin.broker.Broker.SubscribeClient:input_type -> loopin.broker.SubscribeRequest
-	6,  // 4: loopin.broker.Broker.Unsubscribe:input_type -> loopin.broker.UnsubscribeRequest
-	6,  // 5: loopin.broker.Broker.UnsubscribeClient:input_type -> loopin.broker.UnsubscribeRequest
-	8,  // 6: loopin.broker.Broker.DisconnectClient:input_type -> loopin.broker.DisconnectRequest
-	3,  // 7: loopin.broker.Broker.Publish:output_type -> loopin.broker.PublishReply
-	5,  // 8: loopin.broker.Broker.Subscribe:output_type -> loopin.broker.SubscribeReply
-	5,  // 9: loopin.broker.Broker.SubscribeClient:output_type -> loopin.broker.SubscribeReply
-	7,  // 10: loopin.broker.Broker.Unsubscribe:output_type -> loopin.broker.UnsubscribeReply
-	7,  // 11: loopin.broker.Broker.UnsubscribeClient:output_type -> loopin.broker.UnsubscribeReply
-	9,  // 12: loopin.broker.Broker.DisconnectClient:output_type -> loopin.broker.DisconnectReply
+	10, // 0: loopify.broker.PublishRequest.metadata:type_name -> loopify.shared.Metadata
+	2,  // 1: loopify.broker.Broker.Publish:input_type -> loopify.broker.PublishRequest
+	4,  // 2: loopify.broker.Broker.Subscribe:input_type -> loopify.broker.SubscribeRequest
+	4,  // 3: loopify.broker.Broker.SubscribeClient:input_type -> loopify.broker.SubscribeRequest
+	6,  // 4: loopify.broker.Broker.Unsubscribe:input_type -> loopify.broker.UnsubscribeRequest
+	6,  // 5: loopify.broker.Broker.UnsubscribeClient:input_type -> loopify.broker.UnsubscribeRequest
+	8,  // 6: loopify.broker.Broker.DisconnectClient:input_type -> loopify.broker.DisconnectRequest
+	3,  // 7: loopify.broker.Broker.Publish:output_type -> loopify.broker.PublishReply
+	5,  // 8: loopify.broker.Broker.Subscribe:output_type -> loopify.broker.SubscribeReply
+	5,  // 9: loopify.broker.Broker.SubscribeClient:output_type -> loopify.broker.SubscribeReply
+	7,  // 10: loopify.broker.Broker.Unsubscribe:output_type -> loopify.broker.UnsubscribeReply
+	7,  // 11: loopify.broker.Broker.UnsubscribeClient:output_type -> loopify.broker.UnsubscribeReply
+	9,  // 12: loopify.broker.Broker.DisconnectClient:output_type -> loopify.broker.DisconnectReply
 	7,  // [7:13] is the sub-list for method output_type
 	1,  // [1:7] is the sub-list for method input_type
 	1,  // [1:1] is the sub-list for extension type_name

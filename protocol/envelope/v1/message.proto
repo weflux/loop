@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package loopin.envelope;
+package loopify.envelope;
 
 import "shared/shared.proto";
 

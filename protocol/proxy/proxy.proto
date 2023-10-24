@@ -1,6 +1,6 @@
 syntax = "proto3";
 
-package loopin.proxy;
+package loopify.proxy;
 
 import "shared/shared.proto";
 

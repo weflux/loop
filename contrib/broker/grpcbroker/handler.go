@@ -2,15 +2,15 @@ package grpcbroker
 
 import (
 	"github.com/mochi-mqtt/server/v2/packets"
-	"github.com/weflux/loopin"
-	"github.com/weflux/loopin/broker"
-	"github.com/weflux/loopin/broker/eventhandler"
+	"github.com/weflux/loopify"
+	"github.com/weflux/loopify/broker"
+	"github.com/weflux/loopify/broker/eventhandler"
 )
 
 var _ eventhandler.EventHandler = new(Handler)
 
 type Handler struct {
-	node   *loopin.Node
+	node   *loopify.Node
 	broker *GrpcBroker
 }
 
@@ -22,7 +22,7 @@ func (h *Handler) OnDisconnect(client string, broker string) error {
 	return nil
 }
 
-func NewHandler(node *loopin.Node, b *GrpcBroker) *Handler {
+func NewHandler(node *loopify.Node, b *GrpcBroker) *Handler {
 	return &Handler{
 		node:   node,
 		broker: b,

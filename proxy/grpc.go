@@ -1,7 +1,7 @@
 package proxy
 
 import (
-	proxypb "github.com/weflux/loopin/protocol/proxy"
+	proxypb "github.com/weflux/loopify/protocol/proxy"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 )

@@ -36,7 +36,7 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/loopin.api.PublishReply'
+                                $ref: '#/components/schemas/loopify.api.PublishReply'
     /hub/api/rpc:
         get:
             tags:
@@ -70,13 +70,13 @@ paths:
                     content:
                         application/json:
                             schema:
-                                $ref: '#/components/schemas/loopin.api.RPCReply'
+                                $ref: '#/components/schemas/loopify.api.RPCReply'
 components:
     schemas:
-        loopin.api.PublishReply:
+        loopify.api.PublishReply:
             type: object
             properties: {}
-        loopin.api.RPCReply:
+        loopify.api.RPCReply:
             type: object
             properties:
                 id:
@@ -84,11 +84,11 @@ components:
                 method:
                     type: string
                 error:
-                    $ref: '#/components/schemas/loopin.api.RPCReply_Error'
+                    $ref: '#/components/schemas/loopify.api.RPCReply_Error'
                 payload:
                     type: string
                     format: bytes
-        loopin.api.RPCReply_Error:
+        loopify.api.RPCReply_Error:
             type: object
             properties:
                 error:
