@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package loopify.envelope;
+package loopify.v1;
 
 import "shared/shared.proto";
 
-option go_package = "github.com/weflux/loopify/protocolenvelope/v1;envelopev1";
+option go_package = "github.com/weflux/loopify/protocol/loopify/v1;loopify";
 
 message Message {
   string id = 1 [json_name = "id"];
@@ -44,7 +44,7 @@ message SubRefreshReply {
 message Error {
   int32 code = 1;
   string message = 2;
-  map<string, string> extras = 3;
+  map<string, string> metadata = 3;
 }
 
 message Publication {

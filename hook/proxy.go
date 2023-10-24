@@ -8,7 +8,7 @@ import (
 	mqtt "github.com/mochi-mqtt/server/v2"
 	"github.com/mochi-mqtt/server/v2/packets"
 	"github.com/weflux/loopify/errcodes"
-	envelopev1 "github.com/weflux/loopify/protocol/envelope/v1"
+	loopifyv1 "github.com/weflux/loopify/protocol/loopify/v1"
 	proxypb "github.com/weflux/loopify/protocol/proxy"
 	sharedpb "github.com/weflux/loopify/protocol/shared"
 	"github.com/weflux/loopify/proxy"
@@ -128,7 +128,7 @@ func (h *Proxy) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, e
 	topic := pk.TopicName
 	if p, ok := h.proxyMap.RPCProxies[topic]; ok {
 		ct := clientutil.GetContentType(cl)
-		msg := &envelopev1.Message{}
+		msg := &loopifyv1.Message{}
 
 		var pack packets.Packet
 		var err error
@@ -184,12 +184,12 @@ func (h *Proxy) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, e
 
 func errorPacket(cl *mqtt.Client, errRep *proxypb.Error, req *proxypb.RPCRequest) packets.Packet {
 	ct := clientutil.GetContentType(cl)
-	var e *envelopev1.Error
+	var e *loopifyv1.Error
 	if errRep != nil {
-		e = &envelopev1.Error{
-			Code:    errRep.Code,
-			Message: errRep.Message,
-			Extras:  map[string]string{},
+		e = &loopifyv1.Error{
+			Code:     errRep.Code,
+			Message:  errRep.Message,
+			Metadata: map[string]string{},
 		}
 	}
 	id := ""
@@ -201,9 +201,9 @@ func errorPacket(cl *mqtt.Client, errRep *proxypb.Error, req *proxypb.RPCRequest
 	if req != nil {
 		command = req.Command
 	}
-	msg := &envelopev1.Message{
+	msg := &loopifyv1.Message{
 		Id: id,
-		Body: &envelopev1.Message_Reply{Reply: &envelopev1.Reply{
+		Body: &loopifyv1.Message_Reply{Reply: &loopifyv1.Reply{
 			Command: command,
 			Error:   e,
 		}},
@@ -231,19 +231,19 @@ func emptyPacket() packets.Packet {
 func replyPacket(cl *mqtt.Client, rep *proxypb.RPCReply, req *proxypb.RPCRequest) packets.Packet {
 
 	ct := clientutil.GetContentType(cl)
-	var e *envelopev1.Error
+	var e *loopifyv1.Error
 	if rep.Error != nil {
-		e = &envelopev1.Error{
-			Code:    rep.Error.Code,
-			Message: rep.Error.Message,
-			Extras:  map[string]string{},
+		e = &loopifyv1.Error{
+			Code:     rep.Error.Code,
+			Message:  rep.Error.Message,
+			Metadata: map[string]string{},
 		}
 	}
-	msg := &envelopev1.Message{
+	msg := &loopifyv1.Message{
 		Id:      rep.Id,
 		Headers: map[string]string{},
-		Body: &envelopev1.Message_Reply{
-			Reply: &envelopev1.Reply{
+		Body: &loopifyv1.Message_Reply{
+			Reply: &loopifyv1.Reply{
 				Error:        e,
 				Command:      req.Command,
 				ContentType:  rep.ContentType,

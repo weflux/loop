@@ -1,47 +1,12 @@
 syntax = "proto3";
 
-package loopify.api;
+package loopify.v1;
 
 import "shared/shared.proto";
-import "google/api/annotations.proto";
+import "loopify/v1/message.proto";
 
-option go_package = "github.com/weflux/loopify/protocolapi/v1;apiv1";
+option go_package = "github.com/weflux/loopify/protocol/loopify/v1;loopify";
 
-service Api {
-  rpc Publish(PublishRequest) returns (PublishReply) {
-    option (google.api.http) = {
-      post: "/api/publish/json"
-      body: "*"
-    };
-  }
-  rpc Survey(SurveyRequest) returns (SurveyReply) {
-    option (google.api.http) = {
-      post: "/api/survey/json"
-      body: "*"
-    };
-  }
-
-  rpc Subscribe(SubscribeRequest) returns (SubscribeReply) {
-    option (google.api.http) = {
-      post: "/api/subscribe/json"
-      body: "*"
-    };
-  }
-
-  rpc Unsubscribe(UnsubscribeRequest) returns (UnsubscribeReply) {
-    option (google.api.http) = {
-      post: "/api/unsubscribe/json"
-      body: "*"
-    };
-  }
-
-  rpc Disconnect(DisconnectRequest) returns (DisconnectReply) {
-    option (google.api.http) = {
-      post: "/api/disconnect/json"
-      body: "*"
-    };
-  }
-}
 
 message SurveyRequest {
   string id = 1;
@@ -52,11 +17,6 @@ message SurveyRequest {
   string content_type = 6 [json_name = "content_type"];
   string payload_text = 7 [json_name = "payload_text"];
   bytes payload_bytes = 8 [json_name = "payload_bytes"];
-}
-
-message Error {
-  int32 code = 1;
-  string message = 2;
 }
 
 message SurveyReply {
