@@ -2,10 +2,10 @@ package main
 
 import (
 	"context"
-	"github.com/weflux/loopin"
-	"github.com/weflux/loopin/hook"
-	"github.com/weflux/loopin/membroker"
-	"github.com/weflux/loopin/option"
+	"github.com/weflux/loopify"
+	"github.com/weflux/loopify/hook"
+	"github.com/weflux/loopify/membroker"
+	"github.com/weflux/loopify/option"
 	"go.mrchanchal.com/zaphandler"
 	"go.uber.org/zap"
 	"log/slog"
@@ -19,7 +19,7 @@ func main() {
 				Addr:     "127.0.0.1:6379",
 				Password: "",
 				DB:       0,
-				Prefix:   "loopin.",
+				Prefix:   "loopify.",
 			},
 		},
 		MQTT: &option.MQTTOption{
@@ -50,7 +50,7 @@ func main() {
 	slogger := slog.New(zaphandler.New(zlogger))
 	queue := membroker.NewQueue()
 	broker := membroker.NewMemBroker(queue, slogger)
-	node := loopin.NewNode(broker, opts, slogger, hook.NewACL())
+	node := loopify.NewNode(broker, opts, slogger, hook.NewACL())
 	_ = membroker.NewMemHandler(node, queue, slogger)
 	_ = node.Start(ctx)
 	<-ctx.Done()

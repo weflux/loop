@@ -1,7 +1,7 @@
 package contenttype
 
 import (
-	sharedpb "github.com/weflux/loopin/protocol/shared"
+	sharedpb "github.com/weflux/loopify/protocol/shared"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"strings"

@@ -2,9 +2,9 @@ package proxy
 
 import (
 	"context"
-	"github.com/weflux/loopin/contenttype"
-	"github.com/weflux/loopin/option"
-	proxypb "github.com/weflux/loopin/protocol/proxy"
+	"github.com/weflux/loopify/contenttype"
+	"github.com/weflux/loopify/option"
+	proxypb "github.com/weflux/loopify/protocol/proxy"
 	"net/url"
 )
 

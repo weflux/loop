@@ -1,6 +1,6 @@
 package eventhandler
 
-import "github.com/weflux/loopin/broker"
+import "github.com/weflux/loopify/broker"
 
 // EventHandler can handle messages received from PUB/SUB system.
 type EventHandler interface {

@@ -7,7 +7,7 @@
 package envelope
 
 import (
-	shared "github.com/weflux/loopin/protocol/shared"
+	shared "github.com/weflux/loopify/protocol/shared"
 	protoreflect "google.golang.org/protobuf/reflect/protoreflect"
 	protoimpl "google.golang.org/protobuf/runtime/protoimpl"
 	reflect "reflect"
@@ -610,26 +610,26 @@ func file_envelope_v1_message_proto_rawDescGZIP() []byte {
 
 var file_envelope_v1_message_proto_msgTypes = make([]protoimpl.MessageInfo, 9)
 var file_envelope_v1_message_proto_goTypes = []interface{}{
-	(*Message)(nil),         // 0: loopin.envelope.Message
-	(*Request)(nil),         // 1: loopin.envelope.Request
-	(*Reply)(nil),           // 2: loopin.envelope.Reply
-	(*SubRefresh)(nil),      // 3: loopin.envelope.SubRefresh
-	(*SubRefreshReply)(nil), // 4: loopin.envelope.SubRefreshReply
-	(*Error)(nil),           // 5: loopin.envelope.Error
-	(*Publication)(nil),     // 6: loopin.envelope.Publication
-	nil,                     // 7: loopin.envelope.Message.HeadersEntry
-	nil,                     // 8: loopin.envelope.Error.ExtrasEntry
-	(*shared.Metadata)(nil), // 9: loopin.shared.Metadata
+	(*Message)(nil),         // 0: loopify.envelope.Message
+	(*Request)(nil),         // 1: loopify.envelope.Request
+	(*Reply)(nil),           // 2: loopify.envelope.Reply
+	(*SubRefresh)(nil),      // 3: loopify.envelope.SubRefresh
+	(*SubRefreshReply)(nil), // 4: loopify.envelope.SubRefreshReply
+	(*Error)(nil),           // 5: loopify.envelope.Error
+	(*Publication)(nil),     // 6: loopify.envelope.Publication
+	nil,                     // 7: loopify.envelope.Message.HeadersEntry
+	nil,                     // 8: loopify.envelope.Error.ExtrasEntry
+	(*shared.Metadata)(nil), // 9: loopify.shared.Metadata
 }
 var file_envelope_v1_message_proto_depIdxs = []int32{
-	7, // 0: loopin.envelope.Message.headers:type_name -> loopin.envelope.Message.HeadersEntry
-	1, // 1: loopin.envelope.Message.request:type_name -> loopin.envelope.Request
-	2, // 2: loopin.envelope.Message.reply:type_name -> loopin.envelope.Reply
-	6, // 3: loopin.envelope.Message.publication:type_name -> loopin.envelope.Publication
-	5, // 4: loopin.envelope.Message.error:type_name -> loopin.envelope.Error
-	5, // 5: loopin.envelope.Reply.error:type_name -> loopin.envelope.Error
-	9, // 6: loopin.envelope.Reply.metadata:type_name -> loopin.shared.Metadata
-	8, // 7: loopin.envelope.Error.extras:type_name -> loopin.envelope.Error.ExtrasEntry
+	7, // 0: loopify.envelope.Message.headers:type_name -> loopify.envelope.Message.HeadersEntry
+	1, // 1: loopify.envelope.Message.request:type_name -> loopify.envelope.Request
+	2, // 2: loopify.envelope.Message.reply:type_name -> loopify.envelope.Reply
+	6, // 3: loopify.envelope.Message.publication:type_name -> loopify.envelope.Publication
+	5, // 4: loopify.envelope.Message.error:type_name -> loopify.envelope.Error
+	5, // 5: loopify.envelope.Reply.error:type_name -> loopify.envelope.Error
+	9, // 6: loopify.envelope.Reply.metadata:type_name -> loopify.shared.Metadata
+	8, // 7: loopify.envelope.Error.extras:type_name -> loopify.envelope.Error.ExtrasEntry
 	8, // [8:8] is the sub-list for method output_type
 	8, // [8:8] is the sub-list for method input_type
 	8, // [8:8] is the sub-list for extension type_name

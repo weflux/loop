@@ -1,4 +1,4 @@
-package loopin
+package loopify
 
 import (
 	"context"
@@ -7,11 +7,11 @@ import (
 	"github.com/mochi-mqtt/server/v2/hooks/storage/redis"
 	"github.com/mochi-mqtt/server/v2/listeners"
 	"github.com/mochi-mqtt/server/v2/packets"
-	"github.com/weflux/loopin/broker"
-	"github.com/weflux/loopin/hook"
-	"github.com/weflux/loopin/hook/badgerv4"
-	"github.com/weflux/loopin/option"
-	"github.com/weflux/loopin/proxy"
+	"github.com/weflux/loopify/broker"
+	"github.com/weflux/loopify/hook"
+	"github.com/weflux/loopify/hook/badgerv4"
+	"github.com/weflux/loopify/option"
+	"github.com/weflux/loopify/proxy"
 	"log"
 	"log/slog"
 )

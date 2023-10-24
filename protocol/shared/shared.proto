@@ -1,8 +1,8 @@
 syntax = "proto3";
 
-package loopin.shared;
+package loopify.shared;
 
-option go_package = "github.com/weflux/loopin/protocol/shared;sharedpb";
+option go_package = "github.com/weflux/loopify/protocol/shared;sharedpb";
 
 enum ContentType {
   // 未定义

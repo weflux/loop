@@ -19,11 +19,11 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Api_Publish_FullMethodName     = "/loopin.api.Api/Publish"
-	Api_Survey_FullMethodName      = "/loopin.api.Api/Survey"
-	Api_Subscribe_FullMethodName   = "/loopin.api.Api/Subscribe"
-	Api_Unsubscribe_FullMethodName = "/loopin.api.Api/Unsubscribe"
-	Api_Disconnect_FullMethodName  = "/loopin.api.Api/Disconnect"
+	Api_Publish_FullMethodName     = "/loopify.api.Api/Publish"
+	Api_Survey_FullMethodName      = "/loopify.api.Api/Survey"
+	Api_Subscribe_FullMethodName   = "/loopify.api.Api/Subscribe"
+	Api_Unsubscribe_FullMethodName = "/loopify.api.Api/Unsubscribe"
+	Api_Disconnect_FullMethodName  = "/loopify.api.Api/Disconnect"
 )
 
 // ApiClient is the client API for Api service.
@@ -228,7 +228,7 @@ func _Api_Disconnect_Handler(srv interface{}, ctx context.Context, dec func(inte
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
 var Api_ServiceDesc = grpc.ServiceDesc{
-	ServiceName: "loopin.api.Api",
+	ServiceName: "loopify.api.Api",
 	HandlerType: (*ApiServer)(nil),
 	Methods: []grpc.MethodDesc{
 		{
