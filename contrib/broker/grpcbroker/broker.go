@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/avast/retry-go/v4"
 	"github.com/google/uuid"
 	"github.com/weflux/loopify/broker"
 	brokerpb "github.com/weflux/loopify/protocol/broker"
@@ -307,23 +308,22 @@ func timeoutCtx(ctx context.Context) (context.Context, context.CancelFunc) {
 
 func (b *GrpcBroker) Publish(pub *broker.Publication) error {
 	sendFn := func(cli brokerpb.BrokerClient) error {
-		ctx, cancelCtx := timeoutCtx(b.ctx)
-		defer cancelCtx()
-		if _, err := cli.Publish(ctx, &brokerpb.PublishRequest{
-			//Id:     uuid.NewString(),
-			Topic:  pub.TopicName,
-			Retain: pub.Retain,
-			Qos:    int32(pub.Qos),
-			Metadata: &sharedpb.Metadata{
-				Topic:   pub.TopicName,
-				User:    "",
-				Session: "",
-			},
-			Payload: pub.Payload,
-		}); err != nil {
+		return retry.Do(func() error {
+			ctx, cancelCtx := timeoutCtx(b.ctx)
+			defer cancelCtx()
+			_, err := cli.Publish(ctx, &brokerpb.PublishRequest{
+				Topic:  pub.TopicName,
+				Retain: pub.Retain,
+				Qos:    int32(pub.Qos),
+				Metadata: &sharedpb.Metadata{
+					Topic:   pub.TopicName,
+					User:    "",
+					Session: "",
+				},
+				Payload: pub.Payload,
+			})
 			return err
-		}
-		return nil
+		})
 	}
 	return b.broadcast(sendFn)
 }

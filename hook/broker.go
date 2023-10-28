@@ -126,14 +126,20 @@ func (h *Broker) OnUnsubscribed(cl *mqtt.Client, pk packets.Packet) {}
 
 // OnPublish is called when a client publishes a message.
 func (h *Broker) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, error) {
+	return h.HookBase.OnPublish(cl, pk)
+}
+
+// OnPublished is called when a client has published a message to subscribers.
+func (h *Broker) OnPublished(cl *mqtt.Client, pk packets.Packet) {
 	if pk.Ignore {
-		return pk, nil
+		return
 	}
 
 	if !cl.Net.Inline {
 		if h.proxyMap != nil {
+			// 如果有 RPC 代理配置的 topic 不进行广播
 			if _, ok := h.proxyMap.RPCProxies[pk.TopicName]; ok {
-				return pk, nil
+				return
 			}
 		}
 		if err := h.broker.Publish(&broker.Publication{
@@ -142,13 +148,7 @@ func (h *Broker) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, 
 			Qos:       pk.FixedHeader.Qos,
 			Payload:   pk.Payload,
 		}); err != nil {
-			return packets.Packet{}, err
+			h.Log.Error("publish message to broker failed after retry", "error", err)
 		}
-		return packets.Packet{}, nil
 	}
-
-	return pk, nil
 }
-
-// OnPublished is called when a client has published a message to subscribers.
-func (h *Broker) OnPublished(cl *mqtt.Client, pk packets.Packet) {}
