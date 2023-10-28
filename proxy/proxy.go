@@ -13,9 +13,14 @@ type ProxyMap struct {
 
 func NewProxyMap(opts *option.ProxyOption) *ProxyMap {
 	var connectProxy ConnectProxy
+	var subscribeProxy SubscribeProxy
 
 	if opts.Connect != nil {
 		connectProxy = NewConnectProxy(opts.Connect)
+	}
+
+	if opts.Subscribe != nil {
+		subscribeProxy = NewSubscribeProxy(opts.Subscribe)
 	}
 
 	var rpcProxies map[string]RPCProxy
@@ -26,7 +31,8 @@ func NewProxyMap(opts *option.ProxyOption) *ProxyMap {
 	// TODO
 
 	return &ProxyMap{
-		ConnectProxy: connectProxy,
-		RPCProxies:   rpcProxies,
+		ConnectProxy:   connectProxy,
+		SubscribeProxy: subscribeProxy,
+		RPCProxies:     rpcProxies,
 	}
 }

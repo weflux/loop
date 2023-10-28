@@ -55,7 +55,7 @@ func FromRPCRequest(req *proxypb.RPCRequest) (packets.Packet, error) {
 }
 
 func FromRPCReply(cl *mqtt.Client, rep *proxypb.RPCReply) (packets.Packet, error) {
-	ct := clientutil.GetContentType(cl)
+	ct := clientutil.ContentType(cl)
 	data, err := ct.Marshal(rep)
 	if err != nil {
 		return packets.Packet{}, nil

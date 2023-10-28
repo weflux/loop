@@ -19,24 +19,33 @@ import (
 const _ = grpc.SupportPackageIsVersion7
 
 const (
-	Proxy_Connect_FullMethodName    = "/loopify.proxy.Proxy/Connect"
-	Proxy_Subscribe_FullMethodName  = "/loopify.proxy.Proxy/Subscribe"
-	Proxy_RPC_FullMethodName        = "/loopify.proxy.Proxy/RPC"
-	Proxy_Publish_FullMethodName    = "/loopify.proxy.Proxy/Publish"
-	Proxy_Refresh_FullMethodName    = "/loopify.proxy.Proxy/Refresh"
-	Proxy_SubRefresh_FullMethodName = "/loopify.proxy.Proxy/SubRefresh"
+	Proxy_Connect_FullMethodName      = "/loopify.proxy.Proxy/Connect"
+	Proxy_Subscribe_FullMethodName    = "/loopify.proxy.Proxy/Subscribe"
+	Proxy_Subscribed_FullMethodName   = "/loopify.proxy.Proxy/Subscribed"
+	Proxy_Unsubscribed_FullMethodName = "/loopify.proxy.Proxy/Unsubscribed"
+	Proxy_RPC_FullMethodName          = "/loopify.proxy.Proxy/RPC"
+	Proxy_Publish_FullMethodName      = "/loopify.proxy.Proxy/Publish"
+	Proxy_Refresh_FullMethodName      = "/loopify.proxy.Proxy/Refresh"
 )
 
 // ProxyClient is the client API for Proxy service.
 //
 // For semantics around ctx use and closing/ending streaming RPCs, please refer to https://pkg.go.dev/google.golang.org/grpc/?tab=doc#ClientConn.NewStream.
 type ProxyClient interface {
+	// 连接认证
 	Connect(ctx context.Context, in *ConnectRequest, opts ...grpc.CallOption) (*ConnectReply, error)
+	// 检查是否可以订阅该频道
 	Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (*SubscribeReply, error)
+	// 订阅频道后的回调
+	Subscribed(ctx context.Context, in *SubscribedRequest, opts ...grpc.CallOption) (*SubscribedReply, error)
+	// 取消订阅频道后的回调
+	Unsubscribed(ctx context.Context, in *UnsubscribedRequest, opts ...grpc.CallOption) (*UnsubscribedReply, error)
+	// RPC 调用
 	RPC(ctx context.Context, in *RPCRequest, opts ...grpc.CallOption) (*RPCReply, error)
+	// 发布消息的回调
 	Publish(ctx context.Context, in *PublishRequest, opts ...grpc.CallOption) (*PublishReply, error)
+	// 刷新 Session
 	Refresh(ctx context.Context, in *RefreshRequest, opts ...grpc.CallOption) (*RefreshReply, error)
-	SubRefresh(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (*SubRefreshReply, error)
 }
 
 type proxyClient struct {
@@ -59,6 +68,24 @@ func (c *proxyClient) Connect(ctx context.Context, in *ConnectRequest, opts ...g
 func (c *proxyClient) Subscribe(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (*SubscribeReply, error) {
 	out := new(SubscribeReply)
 	err := c.cc.Invoke(ctx, Proxy_Subscribe_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *proxyClient) Subscribed(ctx context.Context, in *SubscribedRequest, opts ...grpc.CallOption) (*SubscribedReply, error) {
+	out := new(SubscribedReply)
+	err := c.cc.Invoke(ctx, Proxy_Subscribed_FullMethodName, in, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *proxyClient) Unsubscribed(ctx context.Context, in *UnsubscribedRequest, opts ...grpc.CallOption) (*UnsubscribedReply, error) {
+	out := new(UnsubscribedReply)
+	err := c.cc.Invoke(ctx, Proxy_Unsubscribed_FullMethodName, in, out, opts...)
 	if err != nil {
 		return nil, err
 	}
@@ -92,25 +119,24 @@ func (c *proxyClient) Refresh(ctx context.Context, in *RefreshRequest, opts ...g
 	return out, nil
 }
 
-func (c *proxyClient) SubRefresh(ctx context.Context, in *SubscribeRequest, opts ...grpc.CallOption) (*SubRefreshReply, error) {
-	out := new(SubRefreshReply)
-	err := c.cc.Invoke(ctx, Proxy_SubRefresh_FullMethodName, in, out, opts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // ProxyServer is the server API for Proxy service.
 // All implementations must embed UnimplementedProxyServer
 // for forward compatibility
 type ProxyServer interface {
+	// 连接认证
 	Connect(context.Context, *ConnectRequest) (*ConnectReply, error)
+	// 检查是否可以订阅该频道
 	Subscribe(context.Context, *SubscribeRequest) (*SubscribeReply, error)
+	// 订阅频道后的回调
+	Subscribed(context.Context, *SubscribedRequest) (*SubscribedReply, error)
+	// 取消订阅频道后的回调
+	Unsubscribed(context.Context, *UnsubscribedRequest) (*UnsubscribedReply, error)
+	// RPC 调用
 	RPC(context.Context, *RPCRequest) (*RPCReply, error)
+	// 发布消息的回调
 	Publish(context.Context, *PublishRequest) (*PublishReply, error)
+	// 刷新 Session
 	Refresh(context.Context, *RefreshRequest) (*RefreshReply, error)
-	SubRefresh(context.Context, *SubscribeRequest) (*SubRefreshReply, error)
 	mustEmbedUnimplementedProxyServer()
 }
 
@@ -124,6 +150,12 @@ func (UnimplementedProxyServer) Connect(context.Context, *ConnectRequest) (*Conn
 func (UnimplementedProxyServer) Subscribe(context.Context, *SubscribeRequest) (*SubscribeReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Subscribe not implemented")
 }
+func (UnimplementedProxyServer) Subscribed(context.Context, *SubscribedRequest) (*SubscribedReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Subscribed not implemented")
+}
+func (UnimplementedProxyServer) Unsubscribed(context.Context, *UnsubscribedRequest) (*UnsubscribedReply, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method Unsubscribed not implemented")
+}
 func (UnimplementedProxyServer) RPC(context.Context, *RPCRequest) (*RPCReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RPC not implemented")
 }
@@ -132,9 +164,6 @@ func (UnimplementedProxyServer) Publish(context.Context, *PublishRequest) (*Publ
 }
 func (UnimplementedProxyServer) Refresh(context.Context, *RefreshRequest) (*RefreshReply, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method Refresh not implemented")
-}
-func (UnimplementedProxyServer) SubRefresh(context.Context, *SubscribeRequest) (*SubRefreshReply, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method SubRefresh not implemented")
 }
 func (UnimplementedProxyServer) mustEmbedUnimplementedProxyServer() {}
 
@@ -181,6 +210,42 @@ func _Proxy_Subscribe_Handler(srv interface{}, ctx context.Context, dec func(int
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(ProxyServer).Subscribe(ctx, req.(*SubscribeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Proxy_Subscribed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SubscribedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProxyServer).Subscribed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Proxy_Subscribed_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProxyServer).Subscribed(ctx, req.(*SubscribedRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _Proxy_Unsubscribed_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UnsubscribedRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(ProxyServer).Unsubscribed(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: Proxy_Unsubscribed_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(ProxyServer).Unsubscribed(ctx, req.(*UnsubscribedRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -239,24 +304,6 @@ func _Proxy_Refresh_Handler(srv interface{}, ctx context.Context, dec func(inter
 	return interceptor(ctx, in, info, handler)
 }
 
-func _Proxy_SubRefresh_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(SubscribeRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(ProxyServer).SubRefresh(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: Proxy_SubRefresh_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(ProxyServer).SubRefresh(ctx, req.(*SubscribeRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // Proxy_ServiceDesc is the grpc.ServiceDesc for Proxy service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -273,6 +320,14 @@ var Proxy_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _Proxy_Subscribe_Handler,
 		},
 		{
+			MethodName: "Subscribed",
+			Handler:    _Proxy_Subscribed_Handler,
+		},
+		{
+			MethodName: "Unsubscribed",
+			Handler:    _Proxy_Unsubscribed_Handler,
+		},
+		{
 			MethodName: "RPC",
 			Handler:    _Proxy_RPC_Handler,
 		},
@@ -283,10 +338,6 @@ var Proxy_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "Refresh",
 			Handler:    _Proxy_Refresh_Handler,
-		},
-		{
-			MethodName: "SubRefresh",
-			Handler:    _Proxy_SubRefresh_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

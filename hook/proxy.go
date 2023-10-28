@@ -42,9 +42,7 @@ func (h *Proxy) Provides(b byte) bool {
 	return bytes.Contains([]byte{
 		mqtt.OnConnect,
 		mqtt.OnDisconnect,
-		mqtt.OnSubscribe,
 		mqtt.OnSubscribed,
-		mqtt.OnUnsubscribe,
 		mqtt.OnUnsubscribed,
 		mqtt.OnPublish,
 		mqtt.OnConnectAuthenticate,
@@ -75,21 +73,6 @@ func (h *Proxy) OnConnect(cl *mqtt.Client, pk packets.Packet) error {
 func (h *Proxy) OnDisconnect(cl *mqtt.Client, err error, expire bool) {
 	h.Log.Debug("on disconnect", "client_id", cl.ID)
 	h.HookBase.OnDisconnect(cl, err, expire)
-}
-
-func (h *Proxy) OnSubscribe(cl *mqtt.Client, pk packets.Packet) packets.Packet {
-	topics := []string{}
-	for _, f := range pk.Filters {
-		topics = append(topics, fmt.Sprintf("%s [%d]", f.Filter, f.Qos))
-	}
-	h.Log.Debug("on subscribe channel", "client_id", cl.ID, "topics", topics)
-
-	if h.proxyMap.SubscribeProxy != nil {
-		// TODO
-	} else {
-		return h.HookBase.OnSubscribe(cl, pk)
-	}
-	return pk
 }
 
 func (h *Proxy) OnSubscribed(cl *mqtt.Client, pk packets.Packet, reasonCodes []byte) {
@@ -127,7 +110,7 @@ func (h *Proxy) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, e
 
 	topic := pk.TopicName
 	if p, ok := h.proxyMap.RPCProxies[topic]; ok {
-		ct := clientutil.GetContentType(cl)
+		ct := clientutil.ContentType(cl)
 		msg := &loopifyv1.Message{}
 
 		var pack packets.Packet
@@ -183,7 +166,7 @@ func (h *Proxy) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, e
 }
 
 func errorPacket(cl *mqtt.Client, errRep *proxypb.Error, req *proxypb.RPCRequest) packets.Packet {
-	ct := clientutil.GetContentType(cl)
+	ct := clientutil.ContentType(cl)
 	var e *loopifyv1.Error
 	if errRep != nil {
 		e = &loopifyv1.Error{
@@ -230,7 +213,7 @@ func emptyPacket() packets.Packet {
 
 func replyPacket(cl *mqtt.Client, rep *proxypb.RPCReply, req *proxypb.RPCRequest) packets.Packet {
 
-	ct := clientutil.GetContentType(cl)
+	ct := clientutil.ContentType(cl)
 	var e *loopifyv1.Error
 	if rep.Error != nil {
 		e = &loopifyv1.Error{

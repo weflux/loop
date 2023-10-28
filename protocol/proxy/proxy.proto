@@ -8,12 +8,21 @@ option go_package = "github.com/weflux/loopify/protocolproxy;proxypb";
 
 
 service Proxy {
+  // 连接认证
   rpc Connect(ConnectRequest) returns (ConnectReply) {}
+  // 检查是否可以订阅该频道
   rpc Subscribe(SubscribeRequest) returns (SubscribeReply) {}
+  // 订阅频道后的回调
+  rpc Subscribed(SubscribedRequest) returns (SubscribedReply) {}
+  // 取消订阅频道后的回调
+  rpc Unsubscribed(UnsubscribedRequest) returns (UnsubscribedReply) {}
+  // RPC 调用
   rpc RPC(RPCRequest) returns (RPCReply) {}
+  // 发布消息的回调
   rpc Publish(PublishRequest) returns (PublishReply) {}
+  // 刷新 Session
   rpc Refresh(RefreshRequest) returns (RefreshReply) {}
-  rpc SubRefresh(SubscribeRequest) returns (SubRefreshReply) {}
+  //  rpc SubRefresh(SubscribeRequest) returns (SubRefreshReply) {}
 }
 
 message Error {
@@ -47,12 +56,31 @@ message ConnectReply {
 }
 
 message SubscribeRequest {
-
+  string topic = 1;
+  string client = 2;
+  string user = 3;
 }
 
 message SubscribeReply {
-
+  int32 code = 1;
 }
+
+message SubscribedRequest {
+  string topic = 1;
+  string client = 2;
+}
+
+message SubscribedReply {
+}
+
+message UnsubscribedRequest {
+  string topic = 1;
+  string client = 2;
+}
+
+message UnsubscribedReply {
+}
+
 
 message RPCRequest {
   string id = 1;
@@ -82,7 +110,8 @@ message PublishReply {
 }
 
 message RefreshRequest {
-
+  string client = 1;
+  string user = 2;
 }
 
 message RefreshReply {

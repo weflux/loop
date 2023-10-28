@@ -3,7 +3,6 @@ package main
 import (
 	"context"
 	"github.com/weflux/loopify"
-	"github.com/weflux/loopify/hook"
 	"github.com/weflux/loopify/membroker"
 	"github.com/weflux/loopify/option"
 	"go.mrchanchal.com/zaphandler"
@@ -50,7 +49,7 @@ func main() {
 	slogger := slog.New(zaphandler.New(zlogger))
 	queue := membroker.NewQueue()
 	broker := membroker.NewMemBroker(queue, slogger)
-	node := loopify.NewNode(broker, opts, slogger, hook.NewACL())
+	node := loopify.NewNode(broker, opts, slogger)
 	_ = membroker.NewMemHandler(node, queue, slogger)
 	_ = node.Start(ctx)
 	<-ctx.Done()
